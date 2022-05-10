@@ -46,9 +46,22 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @property (strong,nonatomic)   RTCAudioSession *audioSession;
 @property(nonatomic, strong) RTCCameraPreviewView *localeVideoView;
 @property(nonatomic, strong) RTCEAGLVideoView *remoteVideoView;
+@property(nonatomic, weak) IBOutlet UIButton *startBtn;
+@property(nonatomic, weak) IBOutlet UIButton *stopBtn;
 @end
 
 @implementation ViewController
+- (IBAction)startRTCConnectoin:(UIButton *)sender {
+    sender.enabled = !sender.enabled;
+  
+    [self.socketManager joinwihtRoomId:@"123456" name:@"44333"];
+    _stopBtn.enabled = true;
+}
+- (IBAction)stopRTCConnectoin:(UIButton *)sender {
+    sender.enabled = !sender.enabled;
+    [self close];
+    self.startBtn.enabled = true;
+}
 
 -(RTCPeerConnectionFactory *)peerconnetionFact{
     if (!_peerconnetionFact) {
@@ -68,6 +81,8 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.startBtn.enabled = YES;
+    self.stopBtn.enabled = YES;
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
     }
@@ -102,7 +117,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
         
     }else if ([emit isEqualToString:@"connect"]){
         NSLog(@"===========>socket connect ");
-        [self.socketManager joinwihtRoomId:@"123456" name:@"44333"];
+        self.startBtn.enabled = true;
     }else if ([emit isEqualToString:@"disconnect"]){
         
     }else if ([emit isEqualToString:@"error"]){
