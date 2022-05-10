@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     RTCAudioSessionDeviceTypeHeadsetMic    = 4,//HeadsetMic 耳机(线控)
 };
 //打
-@interface ViewController ()<RTCPeerConnectionDelegate,RTCAudioSessionDelegate>
+@interface ViewController ()<RTCPeerConnectionDelegate,RTCAudioSessionDelegate,RTCDataChannelDelegate>
 
 @property(nonatomic, strong) LYMSocketManager *socketManager;
 // 是不是主叫
@@ -33,7 +33,9 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @property(nonatomic, strong)RTCPeerConnectionFactory *peerconnetionFact;
 
 @property(nonatomic, strong)RTCDataChannel *sendDC ;
-@property(nonatomic, strong)RTCDataChannel *recvDC;
+@property(nonatomic, strong)RTCAudioTrack *localAudioTrack;
+@property(nonatomic, strong)RTCVideoTrack *localVideoTrack;
+
 @property(nonatomic, assign) BOOL isOffer ;
 @property(nonatomic, copy) NSDictionary *recvSdp;
 @property(nonatomic, strong)NSMutableArray* cacheCandidateMsg;
@@ -43,7 +45,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @property(nonatomic, strong) RTCLYMCameraVideoCapturer *videoCapture;
 @property (strong,nonatomic)   RTCAudioSession *audioSession;
 @property(nonatomic, strong) RTCCameraPreviewView *localeVideoView;
-
+@property(nonatomic, strong) RTCEAGLVideoView *remoteVideoView;
 @end
 
 @implementation ViewController
@@ -60,6 +62,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     }
     return _peerconnetionFact;
 }
+
 -(void)dealloc{
     RTCCleanupSSL();
 }
@@ -68,8 +71,20 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
     }
-    if (self.cacheCandidateMsg) {
+    if (!_cacheCandidateMsg) {
         self.cacheCandidateMsg = [NSMutableArray array];
+    }
+    if (!_remoteVideoView) {
+        RTCEAGLVideoView *remoteView = [[RTCEAGLVideoView alloc]init];
+        remoteView.backgroundColor = [UIColor blackColor];
+        remoteView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*(9/16));
+        self.remoteVideoView = remoteView;
+
+    }
+    if (!_localeVideoView) {
+        self.localeVideoView = [[RTCCameraPreviewView alloc]init];
+        _localeVideoView.frame = CGRectMake(0, 0, 100,200);
+        _localeVideoView.hidden = NO;
     }
     NSString *urlString = @"https://www.lymggylove.top:443";
 //    NSString *urlString = @"https://10.221.120.233:8443";
@@ -166,16 +181,10 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     return [_peerconnetionFact audioTrackWithSource:source trackId:kARDAudioTrackId];
 }
 -(RTCVideoTrack*)videoTrack{
-    //
-    // The iOS simulator doesn't provide any sort of camera capture
-    // support or emulation (http://goo.gl/rHAnC1) so don't bother
-    // trying to open a local stream.ΩΩΩ
-#if !TARGET_IPHONE_SIMULATOR
     RTCVideoSource *source = [_peerconnetionFact videoSource];
     // 这里设置采集的分辨率和码率
     [source adaptOutputFormatToWidth:640 height:480 fps:30];
     return [_peerconnetionFact videoTrackWithSource:source trackId:kARDVideoTrackId];
-#endif
 }
 
 - (void)startRTC{
@@ -195,17 +204,24 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     if (!self.peerconnetionFact) {
         return;
     }
+    NSAssert(self.peerconnetionFact, @"peerConnectionFactory is null ");
     self.peerconnetion  = [self.peerconnetionFact peerConnectionWithConfiguration:config constraints:constraints delegate:self];
-    NSAssert(_peerconnetion, @"peerConnectionWithConfiguration error");
-    RTCVideoTrack *videoTrack = [self videoTrack];
+    NSAssert(_peerconnetion, @"peerConnection is null");
+     RTCDataChannelConfiguration *configDC = [[RTCDataChannelConfiguration alloc]init];
+    configDC.channelId = 0;
+    configDC.isNegotiated = true;
+    self.sendDC = [_peerconnetion dataChannelForLabel:@"my channal" configuration:configDC];
+    NSAssert(_sendDC, @"RTCDatachannal is null");
+    _sendDC.delegate = self;
+    self.localVideoTrack = [self videoTrack];
     // WebRTC中封装的摄像头采集
-    RTCCameraVideoCapturer *cameraCapture = [[RTCCameraVideoCapturer alloc]initWithDelegate:videoTrack.source];
+    RTCCameraVideoCapturer *cameraCapture = [[RTCCameraVideoCapturer alloc]initWithDelegate:_localVideoTrack.source];
     // 自定义的 摄像头管理类
     self.videoCapture = [[RTCLYMCameraVideoCapturer alloc]initWithCapturer:cameraCapture];
-    [self.peerconnetion addTrack:videoTrack streamIds:@[kARDMediaStreamId]];
-    videoTrack.isEnabled = true;
-    RTCAudioTrack *audioTrack = [self audioTrack];
-    [self.peerconnetion addTrack:audioTrack streamIds:@[kARDMediaStreamId]];
+    [self.peerconnetion addTrack:_localVideoTrack streamIds:@[kARDMediaStreamId]];
+    _localVideoTrack.isEnabled = true;
+    self.localAudioTrack = [self audioTrack];
+    [self.peerconnetion addTrack:_localAudioTrack streamIds:@[kARDMediaStreamId]];
     if (_isOffer) {
         RTCMediaConstraints *constraints = [self _defaultOfferConstraintsIsRestartICE:NO numSimulcastLayers:1];
         WEAKSELF
@@ -222,14 +238,14 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
                     }
                 }];
 
+            }else{
+                NSLog(@"");
             }
         }];
         [self.videoCapture startCaptureWithFPS:30 width:1280 height:720 completionHandler:^(NSError * _Nullable error) {
             STRONGSELF
             dispatch_main_async_safe(^{
-                strongSelf.localeVideoView = [[RTCCameraPreviewView alloc]init];
-                strongSelf.localeVideoView.frame = CGRectMake(0, 0, 100,200);
-                strongSelf.localeVideoView.hidden = NO;
+                
                 strongSelf.localeVideoView.captureSession = cameraCapture.captureSession;
                 [strongSelf.view addSubview:strongSelf.localeVideoView];
             });
@@ -241,6 +257,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
         [self.peerconnetion setRemoteDescription:offerDesc completionHandler:^(NSError * _Nullable error) {
             if (!error) {
                 STRONGSELF
+                strongSelf.isSetRemote = YES;
                 RTCMediaConstraints *constraints = [strongSelf _defaultOfferConstraintsIsRestartICE:NO numSimulcastLayers:1];
                 [strongSelf.peerconnetion answerForConstraints:constraints completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
                     if (!error) {
@@ -253,8 +270,12 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
                                 NSLog(@"");
                             }
                         }];
+                    }else{
+                        NSLog(@"");
                     }
                 }];
+            }else{
+                NSLog(@"");
             }
         }];
     }
@@ -449,37 +470,54 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     }
     return nil;
 }
+- (void)close{
+    _localAudioTrack.isEnabled = false;
+    _localVideoTrack.isEnabled = false;
+    [_peerconnetion close];
+    self.peerconnetion = nil;
+    self.peerconnetionFact = nil;
+    [self.sendDC close];
+    self.sendDC = nil;
+    self.isOffer = YES;
+    [self.cacheCandidateMsg removeAllObjects];
+    self.recvSdp = nil;
+    self.isSetRemote = NO;
+    [self.socketManager close];
+    self.socketManager = nil;
+    [self unConfigureAudioSession];
+    
 
+    
+}
 -(void)peerConnection:(RTCPeerConnection *)peerConnection didChangeConnectionState:(RTCPeerConnectionState)newState{
-    switch (newState) {
-        case RTCPeerConnectionStateNew:{
-            
-        }
-            
-            break;
-            
-        case RTCPeerConnectionStateConnecting: {
-            
-            break;
-        }
-        case RTCPeerConnectionStateConnected: {
-            // 媒体要开始通话的时候 设置音频
-            [self audioSessionConfig];
-            break;
-        }
-        case RTCPeerConnectionStateDisconnected: {
-            
-            break;
-        }
-        case RTCPeerConnectionStateFailed: {
-            
-            break;
-        }
-        case RTCPeerConnectionStateClosed: {
-            
-            break;
-        }
-    }
+//    switch (newState) {
+//        case RTCPeerConnectionStateNew:{
+//
+//        }
+//
+//            break;
+//
+//        case RTCPeerConnectionStateConnecting: {
+//
+//            break;
+//        }
+//        case RTCPeerConnectionStateConnected: {
+//
+//            break;
+//        }
+//        case RTCPeerConnectionStateDisconnected: {
+//
+//            break;
+//        }
+//        case RTCPeerConnectionStateFailed: {
+//
+//            break;
+//        }
+//        case RTCPeerConnectionStateClosed: {
+//
+//            break;
+//        }
+//    }
 }
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didGenerateIceCandidate:(RTCIceCandidate *)candidate{
     NSDictionary *msg = @{
@@ -495,12 +533,56 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 }
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didAddStream:(nonnull RTCMediaStream *)stream {
-    
+    if (stream.videoTracks > 0) {
+        dispatch_main_async_safe(^{
+            [self.view insertSubview:self.remoteVideoView atIndex:0];
+            RTCVideoTrack *track = stream.videoTracks[0];
+            [track addRenderer:self.remoteVideoView];
+        });
+       
+    }
 }
 
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didChangeIceConnectionState:(RTCIceConnectionState)newState {
-    
+    switch (newState) {
+        case RTCIceConnectionStateNew:{
+            
+        }
+            
+            break;
+            
+        
+        case RTCIceConnectionStateChecking: {
+            
+            break;
+        }
+        case RTCIceConnectionStateConnected: {
+            // 媒体要开始通话的时候 设置音频
+            [self audioSessionConfig];
+            break;
+        }
+        case RTCIceConnectionStateCompleted: {
+            
+            break;
+        }
+        case RTCIceConnectionStateFailed: {
+            
+            break;
+        }
+        case RTCIceConnectionStateDisconnected: {
+            
+            break;
+        }
+        case RTCIceConnectionStateClosed: {
+            
+            break;
+        }
+        case RTCIceConnectionStateCount: {
+            
+            break;
+        }
+    }
 }
 
 
@@ -515,7 +597,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didOpenDataChannel:(nonnull RTCDataChannel *)dataChannel {
-    
+    NSLog(@"peerConnection:didOpenDataChannel 远端数据通道打开了");
 }
 
 
@@ -525,20 +607,26 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didRemoveStream:(nonnull RTCMediaStream *)stream {
-    if (stream.videoTracks > 0) {
-        RTCEAGLVideoView *remoteView = [[RTCEAGLVideoView alloc]init];
-        remoteView.backgroundColor = [UIColor blackColor];
-        remoteView.frame = CGRectMake(0, 0, 400, 600);
-        [self.view insertSubview:remoteView atIndex:0];
-        RTCVideoTrack *track = stream.videoTracks[0];
-        [track addRenderer:remoteView];
-    }
+   
 }
 
 
 - (void)peerConnectionShouldNegotiate:(nonnull RTCPeerConnection *)peerConnection {
     
 }
+
+
+- (void)dataChannel:(nonnull RTCDataChannel *)dataChannel didReceiveMessageWithBuffer:(nonnull RTCDataBuffer *)buffer {
+    NSLog(@"收到数据啦 %@",buffer.isBinary?buffer.data:[[NSString alloc]initWithData:buffer.data encoding:NSUTF8StringEncoding]);
+}
+
+- (void)dataChannelDidChangeState:(nonnull RTCDataChannel *)dataChannel {
+    if (dataChannel.readyState == RTCDataChannelStateOpen) {
+        NSLog(@"数据通道变化了 %@",@(dataChannel.readyState));
+
+    }
+}
+
 
 
 @end
