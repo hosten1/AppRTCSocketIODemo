@@ -24,6 +24,7 @@
 		1B590C2B282A417100E2233C /* RTCLYMCameraVideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B590C2A282A417100E2233C /* RTCLYMCameraVideoCapturer.m */; };
 		1B590C2D282A6DE000E2233C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; };
 		1B590C2E282A6DE000E2233C /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1BAD4CD9282A9B1400ED5107 /* RTCLYMUtiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BAD4CD8282A9B1300ED5107 /* RTCLYMUtiles.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,8 @@
 		1B590C28282A383400E2233C /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		1B590C29282A417100E2233C /* RTCLYMCameraVideoCapturer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCLYMCameraVideoCapturer.h; sourceTree = "<group>"; };
 		1B590C2A282A417100E2233C /* RTCLYMCameraVideoCapturer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCLYMCameraVideoCapturer.m; sourceTree = "<group>"; };
+		1BAD4CD7282A9B1300ED5107 /* RTCLYMUtiles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCLYMUtiles.h; sourceTree = "<group>"; };
+		1BAD4CD8282A9B1300ED5107 /* RTCLYMUtiles.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCLYMUtiles.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				1B364DCB282A042F00CCC820 /* LYMSocketManager.m */,
 				1B590C29282A417100E2233C /* RTCLYMCameraVideoCapturer.h */,
 				1B590C2A282A417100E2233C /* RTCLYMCameraVideoCapturer.m */,
+				1BAD4CD7282A9B1300ED5107 /* RTCLYMUtiles.h */,
+				1BAD4CD8282A9B1300ED5107 /* RTCLYMUtiles.m */,
 			);
 			path = AppRTCSocketIODemo;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 				1B364DAE282A034600CCC820 /* AppDelegate.m in Sources */,
 				1B364DBF282A034800CCC820 /* main.m in Sources */,
 				1B364DCC282A042F00CCC820 /* LYMSocketManager.m in Sources */,
+				1BAD4CD9282A9B1400ED5107 /* RTCLYMUtiles.m in Sources */,
 				1B364DB1282A034600CCC820 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

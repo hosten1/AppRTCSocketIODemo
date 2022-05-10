@@ -7,8 +7,10 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
+#import "RTCLYMUtiles.h"
 
+@interface AppDelegate ()
+@property(nonatomic, strong) RTCLYMUtiles *utiles;
 @end
 
 @implementation AppDelegate
@@ -16,7 +18,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-//    self.window = [UIWindow ma];
+   self.utiles = [[RTCLYMUtiles alloc]init];
+    [_utiles openAuthersOfMICWithBlock:^(BOOL author) {
+        if (!author) {
+            //  没有音频权限直接退出应用
+            exit(-1);
+        }
+    }];
+    [_utiles openAuthersOfCarmarWithOptBlock:^(BOOL isSelectedYes) {
+        
+    }];
     return YES;
 }
 
