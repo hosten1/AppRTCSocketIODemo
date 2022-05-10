@@ -17,13 +17,13 @@
 		1B364DC7282A03CF00CCC820 /* VPSocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B364DC6282A03CF00CCC820 /* VPSocketIO.framework */; };
 		1B364DC8282A03CF00CCC820 /* VPSocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B364DC6282A03CF00CCC820 /* VPSocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B364DCC282A042F00CCC820 /* LYMSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DCB282A042F00CCC820 /* LYMSocketManager.m */; };
-		1B590C1D282A377300E2233C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; };
-		1B590C1E282A377300E2233C /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B590C20282A37BE00E2233C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1F282A37BE00E2233C /* AVFoundation.framework */; };
 		1B590C22282A37CA00E2233C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C21282A37CA00E2233C /* AudioToolbox.framework */; };
 		1B590C24282A37D200E2233C /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C23282A37D100E2233C /* VideoToolbox.framework */; };
 		1B590C26282A381E00E2233C /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C25282A381E00E2233C /* GLKit.framework */; };
 		1B590C2B282A417100E2233C /* RTCLYMCameraVideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B590C2A282A417100E2233C /* RTCLYMCameraVideoCapturer.m */; };
+		1B590C2D282A6DE000E2233C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; };
+		1B590C2E282A6DE000E2233C /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,7 +34,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1B364DC8282A03CF00CCC820 /* VPSocketIO.framework in Embed Frameworks */,
-				1B590C1E282A377300E2233C /* WebRTC.framework in Embed Frameworks */,
+				1B590C2E282A6DE000E2233C /* WebRTC.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,11 +74,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B364DC7282A03CF00CCC820 /* VPSocketIO.framework in Frameworks */,
-				1B590C1D282A377300E2233C /* WebRTC.framework in Frameworks */,
 				1B590C24282A37D200E2233C /* VideoToolbox.framework in Frameworks */,
 				1B590C20282A37BE00E2233C /* AVFoundation.framework in Frameworks */,
 				1B590C26282A381E00E2233C /* GLKit.framework in Frameworks */,
 				1B590C22282A37CA00E2233C /* AudioToolbox.framework in Frameworks */,
+				1B590C2D282A6DE000E2233C /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

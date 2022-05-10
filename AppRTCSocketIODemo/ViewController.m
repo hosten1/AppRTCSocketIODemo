@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 
 @property(nonatomic, strong) RTCLYMCameraVideoCapturer *videoCapture;
 @property (strong,nonatomic)   RTCAudioSession *audioSession;
+@property(nonatomic, strong) RTCCameraPreviewView *localeVideoView;
 
 @end
 
@@ -54,7 +55,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
         RTCInitFieldTrialDictionary(fieldTrials);
         RTCDefaultVideoDecoderFactory *decodeFact = [[RTCDefaultVideoDecoderFactory alloc]init];
         RTCDefaultVideoEncoderFactory *encodeFact = [[RTCDefaultVideoEncoderFactory alloc]init];
-        encodeFact.preferredCodec = [[RTCVideoCodecInfo alloc]initWithName:kRTCVideoCodecH264Name];
+//        encodeFact.preferredCodec = [[RTCVideoCodecInfo alloc]initWithName:kRTCVideoCodecH264Name];
         _peerconnetionFact = [[RTCPeerConnectionFactory alloc]initWithEncoderFactory:encodeFact decoderFactory:decodeFact];
     }
     return _peerconnetionFact;
@@ -202,6 +203,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     // 自定义的 摄像头管理类
     self.videoCapture = [[RTCLYMCameraVideoCapturer alloc]initWithCapturer:cameraCapture];
     [self.peerconnetion addTrack:videoTrack streamIds:@[kARDMediaStreamId]];
+    videoTrack.isEnabled = true;
     RTCAudioTrack *audioTrack = [self audioTrack];
     [self.peerconnetion addTrack:audioTrack streamIds:@[kARDMediaStreamId]];
     if (_isOffer) {
@@ -221,6 +223,17 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
                 }];
 
             }
+        }];
+        [self.videoCapture startCaptureWithFPS:30 width:1280 height:720 completionHandler:^(NSError * _Nullable error) {
+            STRONGSELF
+            dispatch_main_async_safe(^{
+                strongSelf.localeVideoView = [[RTCCameraPreviewView alloc]init];
+                strongSelf.localeVideoView.frame = CGRectMake(0, 0, 100,200);
+                strongSelf.localeVideoView.hidden = NO;
+                strongSelf.localeVideoView.captureSession = cameraCapture.captureSession;
+                [strongSelf.view addSubview:strongSelf.localeVideoView];
+            });
+            
         }];
     }else{
         RTCSessionDescription *offerDesc = [[RTCSessionDescription alloc]initWithType:RTCSdpTypeOffer sdp:_recvSdp[@"sdp"]];
@@ -512,7 +525,14 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didRemoveStream:(nonnull RTCMediaStream *)stream {
-    
+    if (stream.videoTracks > 0) {
+        RTCEAGLVideoView *remoteView = [[RTCEAGLVideoView alloc]init];
+        remoteView.backgroundColor = [UIColor blackColor];
+        remoteView.frame = CGRectMake(0, 0, 400, 600);
+        [self.view insertSubview:remoteView atIndex:0];
+        RTCVideoTrack *track = stream.videoTracks[0];
+        [track addRenderer:remoteView];
+    }
 }
 
 
