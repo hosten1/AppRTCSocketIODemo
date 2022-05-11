@@ -164,23 +164,24 @@
     }];
 
 }
-- (void)sendMessage:(NSDictionary*)message withMethod:(NSString*)method{
-    
+-(void)sendMessageWithInfo:(NSString *)info message:(NSDictionary *)message withMethod:(NSString *)method{
     WEAKSELF
     dispatch_async(_currentEngineProtooQueue, ^{
         @autoreleasepool {
             __strong typeof(weakSelf) blockSelf = weakSelf;
             if (!blockSelf.socket) {
-               
                 return;
             }
-            RTCVPSocketOnAckCallback *callback = [blockSelf.socket emitWithAck:method items:@[@"123456",message]];
+            RTCVPSocketOnAckCallback *callback = [blockSelf.socket emitWithAck:method items:info?@[info,message]:@[message]];
             [callback timingOutAfter:10 callback:^(NSArray *array) {
                 NSLog(@">>>>>>>>>ack msg:%@",array);
             }];
         }
-        
     });
+}
+- (void)sendMessage:(NSDictionary*)message withMethod:(NSString*)method{
+    
+  
     
 }
 -(void)close{

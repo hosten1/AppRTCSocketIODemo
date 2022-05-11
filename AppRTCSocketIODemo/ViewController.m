@@ -49,18 +49,22 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @property(nonatomic, strong) RTCEAGLVideoView *remoteVideoView;
 @property(nonatomic, weak) IBOutlet UIButton *startBtn;
 @property(nonatomic, weak) IBOutlet UIButton *stopBtn;
+
+@property(nonatomic, copy) NSString *roomId;
 @end
 
 @implementation ViewController
 - (IBAction)startRTCConnectoin:(UIButton *)sender {
     sender.enabled = !sender.enabled;
-    
-    [self.socketManager joinwihtRoomId:@"123456" name:@"44333"];
+    self.roomId = @"123456";
+    [self.socketManager joinwihtRoomId:_roomId name:@"44333"];
     _stopBtn.enabled = true;
 }
 - (IBAction)stopRTCConnectoin:(UIButton *)sender {
     sender.enabled = !sender.enabled;
+    [self.socketManager sendMessageWithInfo:_roomId message:@{} withMethod:@"leave"];
     [self close];
+    
     self.startBtn.enabled = true;
 }
 
@@ -254,7 +258,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
                 // 发送出去
                 NSDictionary *msg = @{ @"type": @(0),
                                        @"sdp": @{@"type":@"offer",@"sdp":sdp.sdp}};
-                [strongSelf.socketManager sendMessage:msg withMethod:@"message"];
+                [strongSelf.socketManager sendMessageWithInfo:strongSelf.roomId message:msg withMethod:@"message"];
                 [strongSelf.peerconnetion setLocalDescription:sdp completionHandler:^(NSError * _Nullable error) {
                     if (error) {
                         NSLog(@"");
@@ -279,7 +283,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
                         // 发送出去
                         NSDictionary *msg = @{ @"type": @(1),
                                                @"sdp": @{@"type":@"answer",@"sdp":sdp.sdp}};
-                        [weakSelf.socketManager sendMessage:msg withMethod:@"message"];
+                        [weakSelf.socketManager sendMessageWithInfo:weakSelf.roomId message:msg withMethod:@"message"];
                         [weakSelf.peerconnetion setLocalDescription:sdp completionHandler:^(NSError * _Nullable error) {
                             if (error) {
                                 NSLog(@"");
@@ -555,7 +559,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
         }
     };
     //    NSLog(@"===========>socket didGenerateIceCandidate %@ ",msg.description);
-    [self.socketManager sendMessage:msg withMethod:@"message"];
+    [self.socketManager sendMessageWithInfo:_roomId message:msg withMethod:@"message"];
 }
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didAddStream:(nonnull RTCMediaStream *)stream {

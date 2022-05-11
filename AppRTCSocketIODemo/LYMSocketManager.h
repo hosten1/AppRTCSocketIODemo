@@ -37,6 +37,8 @@ typedef void(^notifyInfoCB)(NSString* emit,id data ,__nullable emitResp resp);
 - (void)connectionSocketWithServerUrl:(NSString*)serverUrl isHttps:(BOOL)isHttps params:(NSDictionary*)connectParams;
 - (void)joinwihtRoomId:(NSString*)roomId name:(NSString*)name;
 - (void)sendMessage:(NSDictionary*)message withMethod:(NSString*)method;
+- (void)sendMessageWithInfo:(NSString*)info message:(NSDictionary*)message withMethod:(NSString*)method;
+
 - (void)listenWithCB:(notifyInfoCB)notifyInfo;
 - (void)close;
 
