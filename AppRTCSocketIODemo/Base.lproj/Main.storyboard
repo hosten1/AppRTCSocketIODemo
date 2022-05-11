@@ -17,18 +17,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFZ-9A-tuJ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFZ-9A-tuJ">
                                 <rect key="frame" x="47" y="760" width="53" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="855-Dt-zWf"/>
+                                    <constraint firstAttribute="width" constant="53" id="s6Z-Wg-D45"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="开始"/>
                                 <connections>
                                     <action selector="startRTCConnectoin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mQm-0C-Fyt"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Vv-9r-z9E">
-                                <rect key="frame" x="266" y="760" width="53" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Vv-9r-z9E">
+                                <rect key="frame" x="308" y="760" width="53" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="53" id="SbQ-Vh-5Nz"/>
+                                    <constraint firstAttribute="height" constant="31" id="yfD-eR-ffe"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="结束"/>
                                 <connections>
@@ -38,6 +44,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ZFZ-9A-tuJ" secondAttribute="bottom" constant="71" id="P9G-id-N1C"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4Vv-9r-z9E" secondAttribute="trailing" constant="53" id="Ziq-Gz-WT4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4Vv-9r-z9E" secondAttribute="bottom" constant="71" id="key-Td-kn3"/>
+                            <constraint firstItem="ZFZ-9A-tuJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="47" id="yEl-R6-Vz6"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="startBtn" destination="ZFZ-9A-tuJ" id="oIX-hN-nVK"/>
