@@ -28,6 +28,7 @@
 @property(nonatomic, weak) IBOutlet UIButton *mutedBtn;
 @property (weak, nonatomic) IBOutlet UIButton *switchCamera;
 @property (weak, nonatomic) IBOutlet UIButton *connectServer;
+@property (weak, nonatomic) IBOutlet UIButton *switchAudioDevice;
 
 @property(nonatomic, assign) BOOL isOffer;
 
@@ -67,7 +68,9 @@
     sender.enabled = false;
     if (_videoCapture) {
         [_videoCapture switchCameraWitCcompletionHandler:^(NSError * _Nullable error) {
-                    
+            dispatch_main_async_safe(^{
+                sender.enabled = true;
+            });
         }];
     }
     sender.selected = !sender.selected;
@@ -78,6 +81,19 @@
 }
 
 
+- (IBAction)switchDevice:(UIButton *)sender {
+    if (!sender.selected) {
+        if (_peerManager) {
+            [_peerManager switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeSpeaker];
+        }
+    }else{
+        if (_peerManager) {
+            [_peerManager switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeEarphone];
+        }
+    }
+  
+    sender.selected = !sender.selected;
+}
 
 
 - (void)viewDidLoad {
@@ -88,8 +104,11 @@
     [_startBtn setTitle:@"结束" forState:UIControlStateSelected];
     [_switchCamera setTitle:@"前置" forState:UIControlStateNormal];
     [_switchCamera setTitle:@"后置" forState:UIControlStateSelected];
+    [_switchAudioDevice setTitle:@"听筒" forState:UIControlStateNormal];
+    [_switchAudioDevice setTitle:@"外放" forState:UIControlStateSelected];
     self.mutedBtn.enabled = NO;
     self.switchCamera.enabled = NO;
+    self.switchAudioDevice.enabled = NO;
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
         WEAKSELF
@@ -196,6 +215,7 @@
     self.startBtn.enabled = NO;
     self.mutedBtn.enabled = NO;
     self.switchCamera.enabled = NO;
+    self.switchAudioDevice.enabled = NO;
 }
 - (void)_startRTCWithOfferSdp:(nullable RTCSessionDescription*)offerDesc{
     WEAKSELF
@@ -242,6 +262,7 @@
                 [self.peerManager addLocalView:self.localeVideoView];
                 [self.peerManager addRemoteView:self.remoteVideoView userID:nil];
                 self.switchCamera.enabled = YES;
+                self.switchAudioDevice.enabled = YES;
             });
             break;
         }

@@ -57,6 +57,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="外音"/>
+                                <connections>
+                                    <action selector="switchDevice:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XVf-Q3-vfX"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XvR-pm-4bn">
                                 <rect key="frame" x="90" y="672" width="274" height="34"/>
@@ -115,6 +118,7 @@
                         <outlet property="connectServer" destination="F7t-hj-iq5" id="dRq-tm-LA3"/>
                         <outlet property="mutedBtn" destination="4Vv-9r-z9E" id="JTo-zs-CIY"/>
                         <outlet property="startBtn" destination="ZFZ-9A-tuJ" id="oIX-hN-nVK"/>
+                        <outlet property="switchAudioDevice" destination="sol-0z-qBj" id="hk6-uo-LqL"/>
                         <outlet property="switchCamera" destination="nPm-ME-kzD" id="Vei-NN-H0k"/>
                         <outlet property="turnTF" destination="XvR-pm-4bn" id="2hj-iS-IzT"/>
                     </connections>

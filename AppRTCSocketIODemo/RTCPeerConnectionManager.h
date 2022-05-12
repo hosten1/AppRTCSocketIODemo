@@ -21,6 +21,12 @@ typedef NS_ENUM(NSInteger, RTCManagerIceConnectionState) {
   RTCManagerIceConnectionStateClosed,
   RTCManagerIceConnectionStateCount,
 };
+typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
+    RTCAudioSessionDeviceTypeEarphone      = 1,//听筒
+    RTCAudioSessionDeviceTypeSpeaker       = 2,//外放
+    RTCAudioSessionDeviceTypeBluetooth     = 3,//蓝牙
+    RTCAudioSessionDeviceTypeHeadsetMic    = 4,//HeadsetMic 耳机(线控)
+};
 @class RTCPeerConnectionManager;
 NS_ASSUME_NONNULL_BEGIN
 @protocol  RTCPeerConnectionManagerDelegate <NSObject>
@@ -56,6 +62,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)addRemoteView:(UIView *_Nonnull)remoteView userID:(NSString *_Nullable)userId;
 
+/// 切换音频设备
+/// @param deviceType  枚举类型切换 默认外音
+-(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType;
 
 - (void)close;
 @end

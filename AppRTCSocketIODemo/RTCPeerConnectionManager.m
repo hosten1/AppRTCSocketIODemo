@@ -32,12 +32,7 @@ static NSString * const kARDVideoTrackId = @"ARDAMSv0";
 static NSString * const kARDScreenVideoTrackId = @"ARDAMSv1";
 static NSString * const kARDMediaStreamId = @"ARDAMS";
 
-typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
-    RTCAudioSessionDeviceTypeEarphone      = 1,//听筒
-    RTCAudioSessionDeviceTypeSpeaker       = 2,//外放
-    RTCAudioSessionDeviceTypeBluetooth     = 3,//蓝牙
-    RTCAudioSessionDeviceTypeHeadsetMic    = 4,//HeadsetMic 耳机(线控)
-};
+
 @interface RTCPeerConnectionManager ()<RTCPeerConnectionDelegate,RTCAudioSessionDelegate,RTCDataChannelDelegate,RTCEAGLVideoViewDelegate>
 // 是不是主叫
 @property(nonatomic, strong)RTCPeerConnection *peerconnetion;
@@ -346,7 +341,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     _audioSession.isAudioEnabled = YES;
     [_audioSession unlockForConfiguration];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeSpeaker];
+        [self switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeEarphone;
     });
 }
 -(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType{
@@ -379,27 +374,25 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 }
 - (BOOL)switchSpeaker:(BOOL)onOrOff
 {
+    [_audioSession lockForConfiguration];
+
     NSError* audioError = nil;
     BOOL changeResult = NO;
     if (onOrOff == YES)
     {
         NSLog(@"hosten current switchSpeaker 外音");
-        
         changeResult = [[RTCAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&audioError];
-        [_audioSession unlockForConfiguration];
-        
     }
     else
     {
         NSLog(@"hosten current switchSpeaker 听筒");
-        
-        [_audioSession lockForConfiguration];
         AVAudioSessionPortDescription* builtinPort = [self builtinAudioDevice];
         changeResult = [[RTCAudioSession sharedInstance] setPreferredInput:builtinPort error:&audioError];
         //        changeResult = [[RTCAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&audioError];
-        [_audioSession unlockForConfiguration];
         
     }
+    [_audioSession unlockForConfiguration];
+
     return changeResult;
 }
 
