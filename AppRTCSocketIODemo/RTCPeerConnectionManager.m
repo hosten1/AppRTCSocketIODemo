@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @property(nonatomic, strong)RTCVideoTrack *remoteVideoTrack;
 
 @property(nonatomic, assign) BOOL isOffer ;
+@property(nonatomic, assign) BOOL useDataChannal;
 @property(nonatomic, strong)NSMutableArray<RTCIceCandidate*>* cacheCandidateMsg;
 @property(nonatomic, copy) NSString* selfid;
 @property(nonatomic, assign) BOOL isSetRemote;
@@ -63,9 +64,10 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 @end
 
 @implementation RTCPeerConnectionManager
--(instancetype)init{
+-(instancetype)initWithUserDataChannal:(BOOL)useDataChannal{
     if (self = [super init]) {
         _cacheCandidateMsg = [NSMutableArray array];
+        _useDataChannal = useDataChannal;
     }
     return self;
 }
@@ -118,7 +120,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 //    config.tcpCandidatePolicy = RTCTcpCandidatePolicyDisabled;
 //    config.continualGatheringPolicy = RTCContinualGatheringPolicyGatherContinually;
 //    config.disableIPV6 = NO;
-    //  这个参数必须设置
+    //  这个参数不是必须设置，官方的代码如果报错就请注释
     config.logFilePath  = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0] mutableCopy] stringByAppendingString:@"/log/"];
     RTCMediaConstraints *constraints =  [self _defaultPeerConnectionConstraints];
     if (!self.peerconnetionFact) {
@@ -127,12 +129,15 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     NSAssert(self.peerconnetionFact, @"peerConnectionFactory is null ");
     self.peerconnetion  = [self.peerconnetionFact peerConnectionWithConfiguration:config constraints:constraints delegate:self];
     NSAssert(_peerconnetion, @"peerConnection is null");
-//    RTCDataChannelConfiguration *configDC = [[RTCDataChannelConfiguration alloc]init];
-//    configDC.channelId = 0;
-//    configDC.isNegotiated = true;
-//    self.sendDC = [_peerconnetion dataChannelForLabel:@"my channal" configuration:configDC];
-//    NSAssert(_sendDC, @"RTCDatachannal is null");
-//    _sendDC.delegate = self;
+    if (_useDataChannal) {
+        RTCDataChannelConfiguration *configDC = [[RTCDataChannelConfiguration alloc]init];
+        configDC.channelId = 0;
+        configDC.isNegotiated = true;
+        self.sendDC = [_peerconnetion dataChannelForLabel:@"my channal" configuration:configDC];
+        NSAssert(_sendDC, @"RTCDatachannal is null");
+        _sendDC.delegate = self;
+    }
+   
     self.localVideoTrack = [self videoTrack];
     // WebRTC中封装的摄像头采集
     RTCCameraVideoCapturer *cameraCapture = [[RTCCameraVideoCapturer alloc]initWithDelegate:_localVideoTrack.source];

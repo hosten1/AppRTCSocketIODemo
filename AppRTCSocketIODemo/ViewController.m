@@ -55,7 +55,7 @@
         self.socketManager = [[LYMSocketManager alloc]init];
     }
     if (!_peerManager) {
-        self.peerManager = [[RTCPeerConnectionManager alloc]init];
+        self.peerManager = [[RTCPeerConnectionManager alloc]initWithUserDataChannal:true];
         _peerManager.delegate = self;
     }
     if (!_remoteVideoView) {

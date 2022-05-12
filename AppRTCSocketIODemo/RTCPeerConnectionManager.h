@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 @interface RTCPeerConnectionManager : UIView
 @property(nonatomic, weak) id<RTCPeerConnectionManagerDelegate> delegate;
-
+-(instancetype)initWithUserDataChannal:(BOOL)useDataChannal;
 - (void)startRTCWithIsOffer:(BOOL)isOffer offerSdp:(nullable RTCSessionDescription *)sessionDesc Handler:(void(^)(RTCSessionDescription *_Nullable sessionDesc,RTCCameraVideoCapturer *_Nullable cameraCapture,NSError *error)) handler;
 - (void)setRemoteSDPWithSDP:(NSString *)sdp;
 - (void)addRemoteIceCandidateWithCandidate:(NSString*)candidateStr sdpMLineIndex:(int)sdpMLineIndex sdpMid:(NSString*)sdpMid;
