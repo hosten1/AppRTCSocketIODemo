@@ -282,7 +282,7 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 
 }
 - (void)_addcandidateFUN {
-    for (RTCIceCandidate *candidate in _cacheCandidateMsg) {
+    for (RTCIceCandidate *candidate in [NSArray arrayWithArray:_cacheCandidateMsg]) {
         [self.peerconnetion addIceCandidate:candidate];
     }
     [self.cacheCandidateMsg removeAllObjects];
@@ -433,11 +433,11 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 }
 
 - (void)unConfigureAudioSession {
+    [_audioSession lockForConfiguration];
     RTCAudioSessionConfiguration *configuration =
     [RTCAudioSessionConfiguration currentConfiguration];
     BOOL hasSucceeded = NO;
     NSError *error = nil;
-    [_audioSession lockForConfiguration];
     hasSucceeded = [_audioSession setConfiguration:configuration active:NO error:&error];
     if (!hasSucceeded) {
         NSLog(@"Error setting configuration: %@", error.localizedDescription);
@@ -479,11 +479,18 @@ typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
 - (void)close{
     _localAudioTrack.isEnabled = false;
     _localVideoTrack.isEnabled = false;
+    [_localeVideoView removeFromSuperview];
+    self.localeVideoView = nil;
+    [_remoteVideoView removeFromSuperview];
+    self.remoteVideoView = nil;
     [_peerconnetion close];
     self.peerconnetion = nil;
     self.peerconnetionFact = nil;
-    [self.sendDC close];
-    self.sendDC = nil;
+    if (_sendDC) {
+        [self.sendDC close];
+        self.sendDC = nil;
+    }
+   
     self.isOffer = YES;
     [self.cacheCandidateMsg removeAllObjects];
     self.isSetRemote = NO;

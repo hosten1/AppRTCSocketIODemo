@@ -12,36 +12,62 @@
 
 #import "RTCPeerConnectionManager.h"
 
+
+#define KRTCSIGNALSERVER  @"www.lymggylove.top:443"
 //打
 @interface ViewController ()<RTCPeerConnectionManagerDelegate>
 
 @property(nonatomic, strong) LYMSocketManager *socketManager;
 @property(nonatomic, strong) RTCPeerConnectionManager *peerManager;
 @property(nonatomic, strong) RTCLYMCameraVideoCapturer *videoCapture;
+@property (weak, nonatomic) IBOutlet UITextField *turnTF;
 
 @property(nonatomic, strong) UIView *localeVideoView;
 @property(nonatomic, strong) UIView *remoteVideoView;
 @property(nonatomic, weak) IBOutlet UIButton *startBtn;
-@property(nonatomic, weak) IBOutlet UIButton *stopBtn;
+@property(nonatomic, weak) IBOutlet UIButton *mutedBtn;
+@property (weak, nonatomic) IBOutlet UIButton *switchCamera;
+@property (weak, nonatomic) IBOutlet UIButton *connectServer;
 
-@property(nonatomic, assign) BOOL isOffer ;
+@property(nonatomic, assign) BOOL isOffer;
 
 @property(nonatomic, copy) NSString *roomId;
 @end
 
 @implementation ViewController
-- (IBAction)startRTCConnectoin:(UIButton *)sender {
-    sender.enabled = !sender.enabled;
-    self.roomId = @"123456";
-    [self.socketManager joinwihtRoomId:_roomId name:@"44333"];
-    _stopBtn.enabled = true;
-}
-- (IBAction)stopRTCConnectoin:(UIButton *)sender {
-    sender.enabled = !sender.enabled;
-    [self.socketManager sendMessageWithInfo:_roomId message:@{} withMethod:@"leave"];
-    [self close];
+- (IBAction)connectServer:(UIButton *)sender {
+    sender.enabled = NO;
     
-    self.startBtn.enabled = true;
+    NSString *urlString = _turnTF.text.length > 5?_turnTF.text : KRTCSIGNALSERVER;
+    //    NSString *urlString = @"https://10.221.120.233:8443";
+    [self.socketManager connectionSocketWithServerUrl:[NSString stringWithFormat:@"https://%@",urlString] isHttps:YES params:@{}];
+}
+- (IBAction)endEditing:(UITextField *)sender {
+    
+    
+}
+- (IBAction)startRTCConnectoin:(UIButton *)sender {
+   
+    if (sender.selected) {
+        [self.socketManager sendMessageWithInfo:_roomId message:@{} withMethod:@"leave"];
+        [self close];
+        _startBtn.titleLabel.text = @"开始";
+        sender.selected = false;
+    }else{
+        self.roomId = @"123456";
+    
+        [self.socketManager joinwihtRoomId:_roomId name:@"44333"];
+        _startBtn.titleLabel.text = @"";
+        sender.selected = true;
+       
+    }
+  
+}
+- (IBAction)switchCamera:(UIButton *)sender {
+}
+- (IBAction)mutedBtn:(UIButton *)sender {
+
+    
 }
 
 
@@ -49,40 +75,42 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        self.startBtn.enabled = YES;
-        self.stopBtn.enabled = YES;
+    self.startBtn.enabled = NO;
+    self.turnTF.text = KRTCSIGNALSERVER;
+    [_startBtn setTitle:@"开始" forState:UIControlStateNormal];
+    [_startBtn setTitle:@"结束" forState:UIControlStateSelected];
+    self.mutedBtn.enabled = NO;
+    self.switchCamera.enabled = NO;
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
+        WEAKSELF
+        [_socketManager listenWithCB:^(NSString * _Nonnull emit, id  _Nonnull data, emitResp  _Nonnull resp) {
+            STRONGSELF
+            [strongSelf _parseMdiasoupNotifyMsg:data emit:emit emitResp:resp];
+        }];
     }
     if (!_peerManager) {
         self.peerManager = [[RTCPeerConnectionManager alloc]initWithUserDataChannal:true];
         _peerManager.delegate = self;
     }
-    if (!_remoteVideoView) {
-        self.remoteVideoView = [[UIView alloc]init];
-        _remoteVideoView.backgroundColor = [UIColor blackColor];
-        _remoteVideoView.frame = CGRectMake(20,230, 300, 200);
-        [self.view insertSubview:_remoteVideoView atIndex:0];
-        
-    }
+   
     if (!_localeVideoView) {
         self.localeVideoView = [[UIView alloc]init];
-        _localeVideoView.frame = CGRectMake(20, 20, 100,200);
-        
-        _localeVideoView.hidden = NO;
+        _localeVideoView.frame = CGRectMake(20, 20,80,120);
+        _remoteVideoView.backgroundColor = [UIColor clearColor];
+        _localeVideoView.hidden = YES;
         [self.view addSubview:_localeVideoView];
         
     }
+    if (!_remoteVideoView) {
+        self.remoteVideoView = [[UIView alloc]init];
+        _remoteVideoView.backgroundColor = [UIColor clearColor];
+        _remoteVideoView.frame = CGRectMake(CGRectGetMaxX(_localeVideoView.frame)+10 ,20, CGRectGetWidth(self.view.frame) - 120, 200);
+        _remoteVideoView.hidden = YES;
+        [self.view insertSubview:_remoteVideoView atIndex:0];
+        
+    }
     
-    NSString *urlString = @"https://www.lymggylove.top:443";
-    //    NSString *urlString = @"https://10.221.120.233:8443";
-    [self.socketManager connectionSocketWithServerUrl:urlString isHttps:YES params:@{}];
-    WEAKSELF
-    [_socketManager listenWithCB:^(NSString * _Nonnull emit, id  _Nonnull data, emitResp  _Nonnull resp) {
-        STRONGSELF
-        [strongSelf _parseMdiasoupNotifyMsg:data emit:emit emitResp:resp];
-    }];
-    // Do any additional setup after loading the view.
 }
 
 - (void)_parseMdiasoupNotifyMsg:(id)data emit:(NSString*)emit emitResp:(emitResp  _Nonnull) resp{
@@ -91,6 +119,8 @@
     }else if ([emit isEqualToString:@"connect"]){
         NSLog(@"===========>socket connect ");
         self.startBtn.enabled = true;
+        self.localeVideoView.hidden = NO;
+        self.remoteVideoView.hidden = NO;
     }else if ([emit isEqualToString:@"disconnect"]){
         
     }else if ([emit isEqualToString:@"error"]){
@@ -139,17 +169,24 @@
 }
 - (void)close{
     //停止本地摄像头
+    WEAKSELF
     [_videoCapture stopCaptureWitCcompletionHandler:^{
-            
+            STRONGSELF
+        strongSelf.videoCapture = nil;
     }];
+    self.localeVideoView.hidden = YES;
+    self.remoteVideoView.hidden = YES;
     //释放其他资源
     [_peerManager close];
     // 最后关闭socket
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.socketManager close];
 //        self.socketManager = nil;
+        self.connectServer.enabled = YES;
     });
- 
+    self.startBtn.enabled = NO;
+    self.mutedBtn.enabled = NO;
+    self.switchCamera.enabled = NO;
 }
 - (void)_startRTCWithOfferSdp:(nullable RTCSessionDescription*)offerDesc{
     WEAKSELF

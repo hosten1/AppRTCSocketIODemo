@@ -21,39 +21,102 @@
                                 <rect key="frame" x="47" y="760" width="53" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="855-Dt-zWf"/>
-                                    <constraint firstAttribute="width" constant="53" id="s6Z-Wg-D45"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="开始"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="开始"/>
                                 <connections>
                                     <action selector="startRTCConnectoin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mQm-0C-Fyt"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Vv-9r-z9E">
-                                <rect key="frame" x="308" y="760" width="53" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F7t-hj-iq5">
+                                <rect key="frame" x="47" y="714" width="81.5" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="53" id="SbQ-Vh-5Nz"/>
+                                    <constraint firstAttribute="height" constant="31" id="Hlg-GF-tyB"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="连接服务"/>
+                                <connections>
+                                    <action selector="connectServer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0L0-GH-cGY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nPm-ME-kzD">
+                                <rect key="frame" x="265" y="714" width="96" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="aL7-Sz-zUM"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="切换摄像头"/>
+                                <connections>
+                                    <action selector="switchCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K5d-5h-xfl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sol-0z-qBj">
+                                <rect key="frame" x="47" y="801" width="53" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="IoI-tj-mIh"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="外音"/>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XvR-pm-4bn">
+                                <rect key="frame" x="90" y="672" width="274" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="hdS-jg-OA6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="endEditing:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="sYa-Yf-ajz"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="信令服务" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8e-Ur-OX0">
+                                <rect key="frame" x="10" y="683" width="70" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="g5V-AO-Sd8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Vv-9r-z9E">
+                                <rect key="frame" x="308" y="768" width="53" height="31"/>
+                                <constraints>
                                     <constraint firstAttribute="height" constant="31" id="yfD-eR-ffe"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="结束"/>
+                                <buttonConfiguration key="configuration" style="plain" title="静音"/>
                                 <connections>
-                                    <action selector="stopRTCConnectoin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="naZ-nm-dok"/>
+                                    <action selector="mutedBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Gd-Sf-T3Y"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="F7t-hj-iq5" firstAttribute="top" secondItem="V8e-Ur-OX0" secondAttribute="bottom" constant="10" id="7sQ-Dt-oOS"/>
+                            <constraint firstItem="V8e-Ur-OX0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="AdU-PG-nIy"/>
+                            <constraint firstItem="ZFZ-9A-tuJ" firstAttribute="leading" secondItem="F7t-hj-iq5" secondAttribute="leading" id="LlA-GG-Won"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ZFZ-9A-tuJ" secondAttribute="bottom" constant="71" id="P9G-id-N1C"/>
+                            <constraint firstItem="ZFZ-9A-tuJ" firstAttribute="top" secondItem="F7t-hj-iq5" secondAttribute="bottom" constant="15" id="PhI-7R-cQL"/>
+                            <constraint firstItem="F7t-hj-iq5" firstAttribute="top" secondItem="XvR-pm-4bn" secondAttribute="bottom" constant="8" symbolic="YES" id="Urc-DJ-133"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4Vv-9r-z9E" secondAttribute="trailing" constant="53" id="Ziq-Gz-WT4"/>
+                            <constraint firstItem="XvR-pm-4bn" firstAttribute="leading" secondItem="V8e-Ur-OX0" secondAttribute="trailing" constant="10" id="ast-MF-Zoq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XvR-pm-4bn" secondAttribute="trailing" constant="50" id="ezb-i6-Ul6"/>
+                            <constraint firstItem="sol-0z-qBj" firstAttribute="leading" secondItem="F7t-hj-iq5" secondAttribute="leading" id="heU-e1-Sfa"/>
+                            <constraint firstItem="sol-0z-qBj" firstAttribute="top" secondItem="ZFZ-9A-tuJ" secondAttribute="bottom" constant="10" id="hyh-jB-rAN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4Vv-9r-z9E" secondAttribute="bottom" constant="71" id="key-Td-kn3"/>
+                            <constraint firstItem="4Vv-9r-z9E" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nPm-ME-kzD" secondAttribute="trailing" id="nrt-xa-9Le"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="sol-0z-qBj" secondAttribute="trailing" symbolic="YES" id="sZK-Q2-uLl"/>
+                            <constraint firstItem="4Vv-9r-z9E" firstAttribute="top" secondItem="nPm-ME-kzD" secondAttribute="bottom" constant="15" id="yDO-Av-Wat"/>
                             <constraint firstItem="ZFZ-9A-tuJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="47" id="yEl-R6-Vz6"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="connectServer" destination="F7t-hj-iq5" id="dRq-tm-LA3"/>
+                        <outlet property="mutedBtn" destination="4Vv-9r-z9E" id="JTo-zs-CIY"/>
                         <outlet property="startBtn" destination="ZFZ-9A-tuJ" id="oIX-hN-nVK"/>
-                        <outlet property="stopBtn" destination="4Vv-9r-z9E" id="8Dv-BB-KXn"/>
+                        <outlet property="switchCamera" destination="nPm-ME-kzD" id="Vei-NN-H0k"/>
+                        <outlet property="turnTF" destination="XvR-pm-4bn" id="2hj-iS-IzT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
