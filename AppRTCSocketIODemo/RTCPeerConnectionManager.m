@@ -341,7 +341,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     _audioSession.isAudioEnabled = YES;
     [_audioSession unlockForConfiguration];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeEarphone;
+        [self switchAudioDeviceWithDeviceType:RTCAudioSessionDeviceTypeEarphone];
     });
 }
 -(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType{
