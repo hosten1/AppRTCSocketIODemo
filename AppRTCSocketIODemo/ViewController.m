@@ -64,6 +64,13 @@
   
 }
 - (IBAction)switchCamera:(UIButton *)sender {
+    sender.enabled = false;
+    if (_videoCapture) {
+        [_videoCapture switchCameraWitCcompletionHandler:^(NSError * _Nullable error) {
+                    
+        }];
+    }
+    sender.selected = !sender.selected;
 }
 - (IBAction)mutedBtn:(UIButton *)sender {
 
@@ -79,6 +86,8 @@
     self.turnTF.text = KRTCSIGNALSERVER;
     [_startBtn setTitle:@"开始" forState:UIControlStateNormal];
     [_startBtn setTitle:@"结束" forState:UIControlStateSelected];
+    [_switchCamera setTitle:@"前置" forState:UIControlStateNormal];
+    [_switchCamera setTitle:@"后置" forState:UIControlStateSelected];
     self.mutedBtn.enabled = NO;
     self.switchCamera.enabled = NO;
     if (!_socketManager) {
@@ -232,6 +241,7 @@
             dispatch_main_async_safe(^{
                 [self.peerManager addLocalView:self.localeVideoView];
                 [self.peerManager addRemoteView:self.remoteVideoView userID:nil];
+                self.switchCamera.enabled = YES;
             });
             break;
         }
