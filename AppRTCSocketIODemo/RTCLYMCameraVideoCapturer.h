@@ -15,6 +15,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RTCLYMCameraVideoCapturer : NSObject
+@property(nonatomic,readonly)RTCCameraVideoCapturer *capturer;
+
 - (instancetype _Nullable )initWithCapturer:(RTCCameraVideoCapturer *_Nonnull)capturer;
 - (instancetype _Nullable )initWithFileCapturer:(RTCFileVideoCapturer *_Nonnull)capturer API_AVAILABLE(ios(10));
 - (void)startCaptureWithFileNamed:(NSString*_Nonnull)fileName;
