@@ -30,13 +30,14 @@ dispatch_async(queue, block);\
 #endif
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^emitResp)(NSInteger code,NSDictionary* data);
-typedef void(^notifyInfoCB)(NSString* emit,id data ,__nullable emitResp resp);
+typedef void(^notifyInfoCB)(NSString* __nonnull emit,NSString* __nullable data1,NSString* __nullable data2,id __nullable data , emitResp __nullable resp);
+
 
 @interface LYMSocketManager : NSObject
 
-- (void)connectionSocketWithServerUrl:(NSString*)serverUrl isHttps:(BOOL)isHttps params:(NSDictionary*)connectParams;
-- (void)joinwihtRoomId:(NSString*)roomId name:(NSString*)name;
-- (void)sendMessage:(NSDictionary*)message withMethod:(NSString*)method;
+- (void)connectionSocketWithServerUrl:(NSString* __nonnull)serverUrl isHttps:(BOOL)isHttps params: (NSDictionary* __nullable)connectParams;
+- (void)joinwihtRoomId:(NSString* __nonnull)roomId name:(NSString* __nullable)name;
+- (void)sendMessage:(NSDictionary* __nonnull)message withMethod:(NSString* __nonnull)method;
 - (void)sendMessageWithInfo:(NSString*)info message:(NSDictionary*)message withMethod:(NSString*)method;
 
 - (void)listenWithCB:(notifyInfoCB)notifyInfo;

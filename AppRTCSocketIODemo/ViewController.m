@@ -112,9 +112,12 @@
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
         WEAKSELF
-        [_socketManager listenWithCB:^(NSString * _Nonnull emit, id  _Nonnull data, emitResp  _Nonnull resp) {
+        [_socketManager listenWithCB:^(NSString * _Nonnull emit, NSString * _Nullable data1, NSString * _Nullable data2, id  _Nullable data, emitResp  _Nullable resp) {
             STRONGSELF
-            [strongSelf _parseMdiasoupNotifyMsg:data emit:emit emitResp:resp];
+            if (data) {
+                [strongSelf _parseMdiasoupNotifyMsg:data emit:emit emitResp:resp];
+            }
+           
         }];
     }
     if (!_peerManager) {

@@ -67,80 +67,31 @@
    WEAKSELF
     [_socket on:kSocketEventConnect callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"connect",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"connect",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"connect" daraArr:array resp:nil];
     }];
     [_socket on:kSocketEventDisconnect callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"disconnect",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"disconnect",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"disconnect" daraArr:array resp:nil];
     }];
     [_socket on:kSocketEventError callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"error",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"error",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"error" daraArr:array resp:nil];
     }];
     [_socket on:@"joined" callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"joined",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"joined",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"joined" daraArr:array resp:nil];
     }];
     [_socket on:@"otherJoined" callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"otherJoined",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"otherJoined",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"otherJoined" daraArr:array resp:nil];
     }];
     [_socket on:@"leaved" callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"leaved",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"leaved",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"leaved" daraArr:array resp:nil];
     }];
     [_socket on:@"message" callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
-        if (!strongSelf.notifyInfo) {
-            return;
-        }
-        if (array.count > 1) {
-            strongSelf.notifyInfo(@"message",array[1],nil);
-        }else{
-            strongSelf.notifyInfo(@"message",array[0],nil);
-        }
+        [strongSelf _parseMsgWithData:@"message" daraArr:array resp:nil];
     }];
     
     [_socket connectWithTimeoutAfter:10 withHandler:^{
@@ -150,7 +101,21 @@
     }];
     
 }
-- (void)listenWithCB:(void (^)(NSString * _Nonnull, id _Nonnull, emitResp _Nonnull))notifyInfo{
+- (void)_parseMsgWithData:(NSString* __nonnull) emit  daraArr:(NSArray *)array resp:(emitResp __nullable) resp{
+    if (!_notifyInfo) {
+        return;
+    }
+    if (array.count == 1) {
+        _notifyInfo(emit,nil,nil,array[0],nil);
+    }else if (array.count == 2) {
+       _notifyInfo(emit,nil,array[0],array[1],nil);
+    }else if (array.count == 3) {
+       _notifyInfo(emit,array[0],array[1],array[2],nil);
+    }else{
+       _notifyInfo(emit,nil,nil,array[0],nil);
+    }
+}
+- (void)listenWithCB:(notifyInfoCB)notifyInfo{
     if (notifyInfo) {
         self.notifyInfo = notifyInfo;
     }

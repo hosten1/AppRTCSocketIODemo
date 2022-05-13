@@ -346,10 +346,10 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 }
 -(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType{
     NSMutableString *str = [NSMutableString string];
-    if (deviceType == RTCAudioSessionDeviceTypeHeadsetMic ) {//耳机/蓝牙不处理切换事件
-        
-        return @"耳机不处理切换事件";
-    }
+//    if (deviceType == RTCAudioSessionDeviceTypeHeadsetMic ) {//耳机/蓝牙不处理切换事件
+//
+//        return @"耳机不处理切换事件";
+//    }
     switch (deviceType) {
         case RTCAudioSessionDeviceTypeEarphone:{
             [self switchEarphone:YES];
