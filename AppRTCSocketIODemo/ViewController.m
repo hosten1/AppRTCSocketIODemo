@@ -266,7 +266,7 @@
     // 设置折线图属性
     _rttLineGraphView.title = @"RTT往返时间"; // 折线图名称
     _rttLineGraphView.maxValue = 100;   // 最大值
-    _rttLineGraphView.yMarkTitles = @[@"0",@"15",@"30",@"45",@"60"]; // Y轴刻度标签
+    _rttLineGraphView.yMarkTitles = @[@"0",@"2",@"5",@"7",@"10",@"30",@"50",@"70"]; // Y轴刻度标签
     _rttLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50",@"70"]; // X轴刻度标签
     _rttLineGraphView.xScaleMarkLEN = 1;
     //线一
@@ -414,7 +414,7 @@
     if (_packLostLineGraphView) {
         NSInteger recv = [dic[@"connRecvBitrateNum"] doubleValue]/1000 ;
         NSInteger send = [dic[@"connSendBitrateNum"] doubleValue]/1000 ;
-        NSLog(@"--------> %@,%@",@(recv) ,@(send));
+//        NSLog(@"--------> %@,%@",@(recv) ,@(send));
 
         //设置完数据等属性后绘图折线图
         [_packLostLineGraphView setXMarkY:@(recv) lineId:[NSString stringWithFormat:@"%d",0]];
