@@ -66,6 +66,23 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param deviceType  枚举类型切换 默认外音
 -(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType;
 
+/**
+ 数据通道发送消息功能
+
+ @param msg 消息文本
+ @return 是否发送成功
+ */
+- (BOOL)sendMessage:(NSString*)msg;
+/**
+ 数据通道发送消息功能
+ 
+ @param data 消息二进制
+ @return 是否发送成功
+ */
+- (BOOL)sendData:(NSData *)data;
+- (void)getStatesWithCallBack:(void (^)( NSDictionary<NSString*,id>* dataCb))statesCB;
+
+
 - (void)close;
 @end
 

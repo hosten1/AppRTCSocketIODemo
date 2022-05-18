@@ -8,6 +8,8 @@
 #import "RTCPeerConnectionManager.h"
 #import <WebRTC/WebRTC.h>
 
+#import "RTCStatsBuilder.h"
+
 #ifndef WEAKSELF
 #define WEAKSELF __weak __typeof(&*self)weakSelf = self;
 #endif
@@ -56,6 +58,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 @property (strong,nonatomic)  RTCAudioSession *audioSession;
 
 @property(nonatomic, assign) CGSize remoteVideoSize;
+@property(nonatomic, strong) RTCStatsBuilder *statsBuilder;
 @end
 
 @implementation RTCPeerConnectionManager
@@ -75,6 +78,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         RTCDefaultVideoEncoderFactory *encodeFact = [[RTCDefaultVideoEncoderFactory alloc]init];
         encodeFact.preferredCodec = [[RTCVideoCodecInfo alloc]initWithName:kRTCVideoCodecVp8Name];
         _peerconnetionFact = [[RTCPeerConnectionFactory alloc]initWithEncoderFactory:encodeFact decoderFactory:decodeFact];
+        _statsBuilder = [[RTCStatsBuilder alloc]init];
     }
     return _peerconnetionFact;
 }
@@ -468,6 +472,40 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         }
     }
     return nil;
+}
+- (BOOL)sendData:(NSData *)data
+{
+    if (!self.useDataChannal) {
+        return NO;
+    }
+    RTCDataBuffer *buffer = [[RTCDataBuffer alloc]initWithData:data isBinary:YES];
+    return [_sendDC sendData:buffer];
+}
+
+- (BOOL)sendMessage:(NSString *)msg
+{
+    if (!self.useDataChannal) {
+        return NO;
+    }
+    
+    RTCDataBuffer *buffer = [[RTCDataBuffer alloc]initWithData:[msg dataUsingEncoding:NSUTF8StringEncoding] isBinary:NO];
+    return [_sendDC sendData:buffer];
+}
+- (void)getStatesWithCallBack:(void (^)(NSDictionary<NSString *,id> * _Nonnull))statesCB{
+    __weak typeof(self) weakSelf = self;
+    [_peerconnetion statsForTrack:nil statsOutputLevel:RTCStatsOutputLevelStandard completionHandler:^(NSArray<RTCLegacyStatsReport *> * _Nonnull stats)
+     {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        for (RTCLegacyStatsReport *report in stats) {
+            @autoreleasepool {
+                [strongSelf.statsBuilder parseStatsReport:report];
+            }
+            
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            statesCB(strongSelf.statsBuilder.statsDic);
+        });
+    }];
 }
 - (void)close{
     _localAudioTrack.isEnabled = false;

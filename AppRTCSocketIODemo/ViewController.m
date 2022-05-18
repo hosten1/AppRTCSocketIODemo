@@ -7,10 +7,10 @@
 
 #import "ViewController.h"
 #import "LYMSocketManager.h"
-
 #import "RTCLYMCameraVideoCapturer.h"
-
 #import "RTCPeerConnectionManager.h"
+#import "RTCLYMTimer.h"
+#import "FBYLineGraphView.h"
 
 
 #define KRTCSIGNALSERVER  @"www.lymggylove.top:443"
@@ -24,6 +24,13 @@
 
 @property(nonatomic, strong) UIView *localeVideoView;
 @property(nonatomic, strong) UIView *remoteVideoView;
+
+@property(nonatomic, strong) RTCLYMTimer *timer;
+/**
+ getstates 信息显示
+ */
+@property(nonatomic,strong)FBYLineGraphView *rttLineGraphView;
+@property(nonatomic,strong)FBYLineGraphView *packLostLineGraphView;
 @property(nonatomic, weak) IBOutlet UIButton *startBtn;
 @property(nonatomic, weak) IBOutlet UIButton *mutedBtn;
 @property (weak, nonatomic) IBOutlet UIButton *switchCamera;
@@ -76,7 +83,7 @@
     sender.selected = !sender.selected;
 }
 - (IBAction)mutedBtn:(UIButton *)sender {
-
+    [self showStates];
     
 }
 
@@ -109,6 +116,9 @@
     self.mutedBtn.enabled = NO;
     self.switchCamera.enabled = NO;
     self.switchAudioDevice.enabled = NO;
+    [self setupRttlineViewWithView:self.view];
+    [self setupPackLostGraphView];
+
     if (!_socketManager) {
         self.socketManager = [[LYMSocketManager alloc]init];
         WEAKSELF
@@ -250,6 +260,62 @@
  
 }
 
+- (void)setupRttlineViewWithView:(UIView*)supView{
+    // 初始化折线图
+    _rttLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(0, self.turnTF.frame.origin.y - 260,200,200)];
+    // 设置折线图属性
+    _rttLineGraphView.title = @"RTT往返时间"; // 折线图名称
+    _rttLineGraphView.maxValue = 60;   // 最大值
+    _rttLineGraphView.yMarkTitles = @[@"0",@"15",@"30",@"45",@"60"]; // Y轴刻度标签
+    _rttLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50"]; // X轴刻度标签
+    _rttLineGraphView.xScaleMarkLEN = 1;
+    //线一
+    [_rttLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",0]]; // X轴刻度标签及相应的值
+    [_rttLineGraphView mappingWithLineId:[NSString stringWithFormat:@"%d",0] lineColor: [UIColor yellowColor]];
+    //添加触摸手势
+    //线二
+    [_rttLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",1]]; // X轴刻度标签及相应的值
+    [_rttLineGraphView mappingWithLineId:[NSString stringWithFormat:@"%d",1] lineColor: [UIColor colorWithRed:0/255.0 green:255/255.0 blue:69/255.0 alpha:1]];
+    [supView addSubview:_rttLineGraphView];
+}
+- (void)setupPackLostGraphView{
+    // 初始化折线图
+    _packLostLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(20,CGRectGetMinY(_rttLineGraphView.frame) - 300,350,300)];
+    //    _sendPackLostGraphView.backgroundColor = [UIColor c];
+    // 设置折线图属性
+    
+    _packLostLineGraphView.title = @"丢包"; // 折线图名称
+    _packLostLineGraphView.maxValue = 3000;   // 最大值
+    _packLostLineGraphView.yMarkTitles = @[@"0",@"500",@"800",@"1000",@"1300",@"1500",@"2000",@"2500"]; // Y轴刻度标签
+    _packLostLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50",@"80"]; // X轴刻度标签
+    _packLostLineGraphView.xScaleMarkLEN = 20;
+    _packLostLineGraphView.lineCont = 2;
+    //线一
+    [_packLostLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",0]]; // X轴刻度标签及相应的值
+    [_packLostLineGraphView mappingWithLineId:[NSString stringWithFormat:@"%d",0] lineColor: [UIColor yellowColor]];
+    //线二
+    [_packLostLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",1]]; // X轴刻度标签及相应的值
+    [_packLostLineGraphView mappingWithLineId:[NSString stringWithFormat:@"%d",1] lineColor: [UIColor colorWithRed:0/255.0 green:255/255.0 blue:69/255.0 alpha:1]];
+    
+    [self.view addSubview:_packLostLineGraphView];
+}
+//- (void)setupRecivePackLostLineGraphView{
+//    // 初始化折线图
+//    _recivePackLostLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_sendPackLostGraphView.frame),CGRectGetWidth(_scrollView.frame)-20, 150)];
+//
+//    // 设置折线图属性
+//
+//    _recivePackLostLineGraphView.title = @"接收方丢包"; // 折线图名称
+//    _recivePackLostLineGraphView.maxValue = 160;   // 最大值
+//    _recivePackLostLineGraphView.yMarkTitles = @[@"0",@"10",@"30",@"50"]; // Y轴刻度标签
+//    _recivePackLostLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50"]; // X轴刻度标签
+//    _recivePackLostLineGraphView.xScaleMarkLEN = 10;
+//    [_recivePackLostLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",0]]; // X轴刻度标签及相应的值
+//    [_recivePackLostLineGraphView mappingWithLineId:[NSString stringWithFormat:@"%d",0]];
+//
+//    //设置完数据等属性后绘图折线图
+//    [self.scrollView addSubview:_recivePackLostLineGraphView];
+//}
 - (void)peerConnectionManager:(nonnull RTCPeerConnectionManager *)client didChangeIceState:(RTCManagerIceConnectionState)state {
     switch (state) {
         case RTCManagerIceConnectionStateNew:{
@@ -265,6 +331,7 @@
                 [self.peerManager addLocalView:self.localeVideoView];
                 [self.peerManager addRemoteView:self.remoteVideoView userID:nil];
                 self.switchCamera.enabled = YES;
+                self.mutedBtn.enabled = YES;
                 self.switchAudioDevice.enabled = YES;
             });
             break;
@@ -291,6 +358,39 @@
         }
     }
 }
+- (void)showStates{
+//    if (!_statesView) {
+//        NSArray * _titles = @[@"呼叫前", @"通话中"];
+//        _statesView = [[LDRTCStatesLogView alloc] initWithTitles:_titles isCall:NO stats:2];
+//        [self.view addSubview:_statesView];
+//
+//        //                       initWithFrame:CGRectMake(20, _singleChatBtnsView.btnContainsViewTop - 230,SCREEN_WIDTH - 40, 200) isCall:self.isCall];
+//    }
+//    if (_statesView) {
+////        WEAKSELF
+//        [_statesView showStatesView];
+////        [_statesView updateAVBeforeWithDictionary:_beforeCallState];
+//        [_statesView onViewControllerClose:^(BOOL isClose) {//log信息页面关闭后音视频小窗口恢复
+////            __strong typeof(weakSelf) strongSelf = weakSelf;
+////            dispatch_async(dispatch_get_main_queue(), ^{
+////
+////            });
+//
+//        }];
+//    }
+    if (!_timer) {
+        self.timer = [[RTCLYMTimer alloc]init];
+        [_timer execTimerWithTask:^(NSInteger count) {
+            WEAKSELF
+            [self.peerManager getStatesWithCallBack:^(NSDictionary<NSString *,id> * _Nonnull dataCb) {
+                STRONGSELF
+                [strongSelf _statsStringWithDic:dataCb withSessionid:strongSelf.roomId];
+            }];
+        } startInterval:1 interbal:1 repeat:YES async:YES];
+    }
+  
+   
+}
 
 - (void)peerConnectionManager:(nonnull RTCPeerConnectionManager *)client didGenerateIceCandidate:(nonnull NSString *)candidateStr sdpMLineIndex:(int)sdpMLineIndex sdpMid:(nonnull NSString *)sdpMid {
     NSDictionary *msg = @{
@@ -304,5 +404,51 @@
     //    NSLog(@"===========>socket didGenerateIceCandidate %@ ",msg.description);
     [self.socketManager sendMessageWithInfo:_roomId message:msg withMethod:@"message"];
 }
+- (NSDictionary *)_statsStringWithDic:(NSDictionary*)dic withSessionid:(NSString*)sessionid {
+   
+    if (_rttLineGraphView) {
+        //设置完数据等属性后绘图折线图
+        [_rttLineGraphView setXMarkY:@([dic[@"connRtt"] integerValue]) lineId:[NSString stringWithFormat:@"%d",0]];
+        [_rttLineGraphView reloadDatasWithLineId:[NSString stringWithFormat:@"%d",0]];
+    }
+    if (_packLostLineGraphView) {
+        NSInteger recv = [dic[@"connRecvBitrateNum"] doubleValue]/1000 ;
+        NSInteger send = [dic[@"connSendBitrateNum"] doubleValue]/1000 ;
+        NSLog(@"--------> %@,%@",@(recv) ,@(send));
 
+        //设置完数据等属性后绘图折线图
+        [_packLostLineGraphView setXMarkY:@(recv) lineId:[NSString stringWithFormat:@"%d",0]];
+        [_packLostLineGraphView reloadDatasWithLineId:[NSString stringWithFormat:@"%d",0]];
+        [_packLostLineGraphView setXMarkY:@(send) lineId:[NSString stringWithFormat:@"%d",1]];
+        [_packLostLineGraphView reloadDatasWithLineId:[NSString stringWithFormat:@"%d",1]];
+    }
+//    if (!_statesView.isHiddent) {
+//        [_statesView updateLogMsgWithDictionary:[[NSDictionary alloc] initWithDictionary:resultDic]];
+//    }
+    
+    //显示详细信息
+    return dic;
+}
+//传入 秒  得到 xx:xx:xx
+-(NSString *)_getMMSSFromSS:(NSInteger)totalTime{
+    
+    NSInteger seconds = totalTime;
+    
+    //format of hour
+    NSString *str_hour = [NSString stringWithFormat:@"%02ld",(long)seconds/3600];
+    //format of minute
+    NSString *str_minute = [NSString stringWithFormat:@"%02ld",(long)(seconds%3600)/60];
+    //format of second
+    NSString *str_second = [NSString stringWithFormat:@"%02ld",(long)seconds%60];
+    //format of time
+    NSString *format_time = nil;
+    if (![str_hour isEqualToString:@"00"]) {
+        format_time =  [NSString stringWithFormat:@"%@:%@:%@",str_hour,str_minute,str_second];
+    }else{
+        format_time =  [NSString stringWithFormat:@"%@:%@",str_minute,str_second];
+    }
+    
+    return format_time;
+    
+}
 @end

@@ -25,10 +25,6 @@
     return  self;
 }
 
-
-
-
-
 -(void)connectionSocketWithServerUrl:(NSString*)serverUrl isHttps:(BOOL)isHttps params:(NSDictionary*)connect
 {
 
@@ -54,7 +50,7 @@
                                     withConfig:@{@"log": @NO,
                                                  @"reconnects":@YES,
                                                  @"reconnectAttempts":@(20),
-                                                 @"forcePolling": @NO,
+                                                 @"forcePolling": @YES,
                                                  @"secure": @(isHttps),
                                                  @"forceNew":@YES,
                                                  @"forceWebsockets":@(YES),

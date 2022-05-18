@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0549DD283489FF00F31CCC /* RTCUISegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549DC283489FF00F31CCC /* RTCUISegmentedView.m */; };
+		1B0549E028348C7E00F31CCC /* RTCLYMTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549DF28348C7E00F31CCC /* RTCLYMTimer.m */; };
+		1B0549E528348DE300F31CCC /* RTCStatsBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549E128348DE300F31CCC /* RTCStatsBuilder.m */; };
+		1B0549E628348DE300F31CCC /* RTCBitrateTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549E228348DE300F31CCC /* RTCBitrateTracker.m */; };
 		1B364DAE282A034600CCC820 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DAD282A034600CCC820 /* AppDelegate.m */; };
 		1B364DB1282A034600CCC820 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DB0282A034600CCC820 /* SceneDelegate.m */; };
 		1B364DB4282A034600CCC820 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DB3282A034600CCC820 /* ViewController.m */; };
@@ -26,6 +30,12 @@
 		1B590C2E282A6DE000E2233C /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B590C1C282A377300E2233C /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B8978AD282B64C700B2EB5E /* RTCPeerConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8978AC282B64C700B2EB5E /* RTCPeerConnectionManager.m */; };
 		1BAD4CD9282A9B1400ED5107 /* RTCLYMUtiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BAD4CD8282A9B1300ED5107 /* RTCLYMUtiles.m */; };
+		1BEFA6E328308C3300595AD8 /* FBYLineGraphColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6DA28308C3300595AD8 /* FBYLineGraphColorView.m */; };
+		1BEFA6E428308C3300595AD8 /* FBYLineGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6DD28308C3300595AD8 /* FBYLineGraphView.m */; };
+		1BEFA6E528308C3300595AD8 /* RTCStatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6DF28308C3300595AD8 /* RTCStatesViewController.m */; };
+		1BEFA6E628308C3300595AD8 /* FBYLineGraphBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6E028308C3300595AD8 /* FBYLineGraphBaseView.m */; };
+		1BEFA6E728308C3300595AD8 /* FBYLineGraphContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6E128308C3300595AD8 /* FBYLineGraphContentView.m */; };
+		1BEFA6E828308C3300595AD8 /* LDRTCStatesLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BEFA6E228308C3300595AD8 /* LDRTCStatesLogView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +54,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B0549DB283489FF00F31CCC /* RTCUISegmentedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCUISegmentedView.h; sourceTree = "<group>"; };
+		1B0549DC283489FF00F31CCC /* RTCUISegmentedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCUISegmentedView.m; sourceTree = "<group>"; };
+		1B0549DE28348C7E00F31CCC /* RTCLYMTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCLYMTimer.h; sourceTree = "<group>"; };
+		1B0549DF28348C7E00F31CCC /* RTCLYMTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCLYMTimer.m; sourceTree = "<group>"; };
+		1B0549E128348DE300F31CCC /* RTCStatsBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCStatsBuilder.m; sourceTree = "<group>"; };
+		1B0549E228348DE300F31CCC /* RTCBitrateTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCBitrateTracker.m; sourceTree = "<group>"; };
+		1B0549E328348DE300F31CCC /* RTCBitrateTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCBitrateTracker.h; sourceTree = "<group>"; };
+		1B0549E428348DE300F31CCC /* RTCStatsBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCStatsBuilder.h; sourceTree = "<group>"; };
 		1B364DA9282A034600CCC820 /* AppRTCSocketIODemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppRTCSocketIODemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B364DAC282A034600CCC820 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1B364DAD282A034600CCC820 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -72,6 +90,18 @@
 		1B8978AC282B64C700B2EB5E /* RTCPeerConnectionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCPeerConnectionManager.m; sourceTree = "<group>"; };
 		1BAD4CD7282A9B1300ED5107 /* RTCLYMUtiles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCLYMUtiles.h; sourceTree = "<group>"; };
 		1BAD4CD8282A9B1300ED5107 /* RTCLYMUtiles.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCLYMUtiles.m; sourceTree = "<group>"; };
+		1BEFA6D728308C3300595AD8 /* FBYLineGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBYLineGraphView.h; sourceTree = "<group>"; };
+		1BEFA6D828308C3300595AD8 /* FBYLineGraphBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBYLineGraphBaseView.h; sourceTree = "<group>"; };
+		1BEFA6D928308C3300595AD8 /* RTCStatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCStatesViewController.h; sourceTree = "<group>"; };
+		1BEFA6DA28308C3300595AD8 /* FBYLineGraphColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBYLineGraphColorView.m; sourceTree = "<group>"; };
+		1BEFA6DB28308C3300595AD8 /* LDRTCStatesLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDRTCStatesLogView.h; sourceTree = "<group>"; };
+		1BEFA6DC28308C3300595AD8 /* FBYLineGraphContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBYLineGraphContentView.h; sourceTree = "<group>"; };
+		1BEFA6DD28308C3300595AD8 /* FBYLineGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBYLineGraphView.m; sourceTree = "<group>"; };
+		1BEFA6DE28308C3300595AD8 /* FBYLineGraphColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBYLineGraphColorView.h; sourceTree = "<group>"; };
+		1BEFA6DF28308C3300595AD8 /* RTCStatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCStatesViewController.m; sourceTree = "<group>"; };
+		1BEFA6E028308C3300595AD8 /* FBYLineGraphBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBYLineGraphBaseView.m; sourceTree = "<group>"; };
+		1BEFA6E128308C3300595AD8 /* FBYLineGraphContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBYLineGraphContentView.m; sourceTree = "<group>"; };
+		1BEFA6E228308C3300595AD8 /* LDRTCStatesLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDRTCStatesLogView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +141,7 @@
 		1B364DAB282A034600CCC820 /* AppRTCSocketIODemo */ = {
 			isa = PBXGroup;
 			children = (
+				1BEFA6D628308C3300595AD8 /* FBYLineGraph */,
 				1B364DAC282A034600CCC820 /* AppDelegate.h */,
 				1B364DAD282A034600CCC820 /* AppDelegate.m */,
 				1B364DAF282A034600CCC820 /* SceneDelegate.h */,
@@ -147,6 +178,33 @@
 				1B364DC6282A03CF00CCC820 /* VPSocketIO.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1BEFA6D628308C3300595AD8 /* FBYLineGraph */ = {
+			isa = PBXGroup;
+			children = (
+				1B0549E328348DE300F31CCC /* RTCBitrateTracker.h */,
+				1B0549E228348DE300F31CCC /* RTCBitrateTracker.m */,
+				1B0549E428348DE300F31CCC /* RTCStatsBuilder.h */,
+				1B0549E128348DE300F31CCC /* RTCStatsBuilder.m */,
+				1B0549DE28348C7E00F31CCC /* RTCLYMTimer.h */,
+				1B0549DF28348C7E00F31CCC /* RTCLYMTimer.m */,
+				1BEFA6D828308C3300595AD8 /* FBYLineGraphBaseView.h */,
+				1BEFA6E028308C3300595AD8 /* FBYLineGraphBaseView.m */,
+				1BEFA6DE28308C3300595AD8 /* FBYLineGraphColorView.h */,
+				1BEFA6DA28308C3300595AD8 /* FBYLineGraphColorView.m */,
+				1BEFA6DC28308C3300595AD8 /* FBYLineGraphContentView.h */,
+				1BEFA6E128308C3300595AD8 /* FBYLineGraphContentView.m */,
+				1BEFA6D728308C3300595AD8 /* FBYLineGraphView.h */,
+				1BEFA6DD28308C3300595AD8 /* FBYLineGraphView.m */,
+				1BEFA6DB28308C3300595AD8 /* LDRTCStatesLogView.h */,
+				1BEFA6E228308C3300595AD8 /* LDRTCStatesLogView.m */,
+				1BEFA6D928308C3300595AD8 /* RTCStatesViewController.h */,
+				1BEFA6DF28308C3300595AD8 /* RTCStatesViewController.m */,
+				1B0549DB283489FF00F31CCC /* RTCUISegmentedView.h */,
+				1B0549DC283489FF00F31CCC /* RTCUISegmentedView.m */,
+			);
+			path = FBYLineGraph;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,11 +280,21 @@
 			files = (
 				1B590C2B282A417100E2233C /* RTCLYMCameraVideoCapturer.m in Sources */,
 				1B364DB4282A034600CCC820 /* ViewController.m in Sources */,
+				1B0549DD283489FF00F31CCC /* RTCUISegmentedView.m in Sources */,
 				1B364DAE282A034600CCC820 /* AppDelegate.m in Sources */,
+				1B0549E028348C7E00F31CCC /* RTCLYMTimer.m in Sources */,
+				1BEFA6E828308C3300595AD8 /* LDRTCStatesLogView.m in Sources */,
+				1BEFA6E328308C3300595AD8 /* FBYLineGraphColorView.m in Sources */,
+				1BEFA6E728308C3300595AD8 /* FBYLineGraphContentView.m in Sources */,
 				1B364DBF282A034800CCC820 /* main.m in Sources */,
 				1B364DCC282A042F00CCC820 /* LYMSocketManager.m in Sources */,
+				1BEFA6E628308C3300595AD8 /* FBYLineGraphBaseView.m in Sources */,
 				1B8978AD282B64C700B2EB5E /* RTCPeerConnectionManager.m in Sources */,
+				1BEFA6E428308C3300595AD8 /* FBYLineGraphView.m in Sources */,
 				1BAD4CD9282A9B1400ED5107 /* RTCLYMUtiles.m in Sources */,
+				1B0549E628348DE300F31CCC /* RTCBitrateTracker.m in Sources */,
+				1B0549E528348DE300F31CCC /* RTCStatsBuilder.m in Sources */,
+				1BEFA6E528308C3300595AD8 /* RTCStatesViewController.m in Sources */,
 				1B364DB1282A034600CCC820 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +446,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppRTCSocketIODemo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "WebRTC测试";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "可以愉快通话";
 				INFOPLIST_KEY_NSCameraUsageDescription = "视频通话";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "循环数据";
@@ -392,8 +461,8 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/framework\"";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lymAppRTCSocketIODemo;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vrv.AppRTCSocketIODemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -415,6 +484,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppRTCSocketIODemo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "WebRTC测试";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "可以愉快通话";
 				INFOPLIST_KEY_NSCameraUsageDescription = "视频通话";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "循环数据";
@@ -429,8 +499,8 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/framework\"";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lymAppRTCSocketIODemo;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vrv.AppRTCSocketIODemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
