@@ -262,12 +262,12 @@
 
 - (void)setupRttlineViewWithView:(UIView*)supView{
     // 初始化折线图
-    _rttLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(0, self.turnTF.frame.origin.y - 260,200,200)];
+    _rttLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(0, self.turnTF.frame.origin.y - 210,CGRectGetWidth(self.view.frame) - 30,150)];
     // 设置折线图属性
     _rttLineGraphView.title = @"RTT往返时间"; // 折线图名称
-    _rttLineGraphView.maxValue = 60;   // 最大值
+    _rttLineGraphView.maxValue = 100;   // 最大值
     _rttLineGraphView.yMarkTitles = @[@"0",@"15",@"30",@"45",@"60"]; // Y轴刻度标签
-    _rttLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50"]; // X轴刻度标签
+    _rttLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50",@"70"]; // X轴刻度标签
     _rttLineGraphView.xScaleMarkLEN = 1;
     //线一
     [_rttLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",0]]; // X轴刻度标签及相应的值
@@ -280,7 +280,7 @@
 }
 - (void)setupPackLostGraphView{
     // 初始化折线图
-    _packLostLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(20,CGRectGetMinY(_rttLineGraphView.frame) - 300,350,300)];
+    _packLostLineGraphView = [[FBYLineGraphView alloc] initWithFrame:CGRectMake(5,CGRectGetMinY(_rttLineGraphView.frame) - 300,CGRectGetWidth(self.view.frame) - 30,300)];
     //    _sendPackLostGraphView.backgroundColor = [UIColor c];
     // 设置折线图属性
     
@@ -288,7 +288,7 @@
     _packLostLineGraphView.maxValue = 3000;   // 最大值
     _packLostLineGraphView.yMarkTitles = @[@"0",@"500",@"800",@"1000",@"1300",@"1500",@"2000",@"2500"]; // Y轴刻度标签
     _packLostLineGraphView.xMarkTitles = @[@"0",@"10",@"30",@"50",@"80"]; // X轴刻度标签
-    _packLostLineGraphView.xScaleMarkLEN = 20;
+    _packLostLineGraphView.xScaleMarkLEN = 1;
     _packLostLineGraphView.lineCont = 2;
     //线一
     [_packLostLineGraphView setXMarkY:@0 lineId:[NSString stringWithFormat:@"%d",0]]; // X轴刻度标签及相应的值
