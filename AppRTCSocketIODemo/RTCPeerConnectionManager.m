@@ -103,7 +103,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 -(RTCVideoTrack*)videoTrack{
     RTCVideoSource *source = [_peerconnetionFact videoSource];
     // 这里设置采集的分辨率和码率
-    [source adaptOutputFormatToWidth:640 height:480 fps:30];
+    [source adaptOutputFormatToWidth:1280 height:720 fps:30];
     return [_peerconnetionFact videoTrackWithSource:source trackId:kARDVideoTrackId];
 }
 

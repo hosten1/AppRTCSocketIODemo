@@ -74,7 +74,7 @@ static NSString *const kYValueKey = @"yValue";
 -(void)setXMarkY:(NSNumber *)yValue lineId:(NSString *)lineID{
         if ([self.yValues.allKeys containsObject:lineID]) {
             NSMutableArray *yMarkValues =  [self.yValues[lineID] mutableCopy];
-            if (yMarkValues.count > 60) {//超过屏幕宽度移除掉(超过1分钟，重新绘制)
+            if (yMarkValues.count > 300) {//超过屏幕宽度移除掉(超过5分钟，重新绘制)
                 [yMarkValues removeAllObjects];
                 
             }
