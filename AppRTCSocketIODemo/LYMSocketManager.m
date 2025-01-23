@@ -133,7 +133,12 @@
             if (!blockSelf.socket) {
                 return;
             }
-            RTCVPSocketOnAckCallback *callback = [blockSelf.socket emitWithAck:method items:info?@[info,message]:@[message]];
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:message];
+            if (info) {
+                 
+                data[@"roomId"] = info;
+            }
+            RTCVPSocketOnAckCallback *callback = [blockSelf.socket emitWithAck:method items:@[data]];
             [callback timingOutAfter:10 callback:^(NSArray *array) {
                 NSLog(@">>>>>>>>>ack msg:%@",array);
             }];

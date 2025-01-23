@@ -110,7 +110,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 - (void)startRTCWithIsOffer:(BOOL)isOffer offerSdp:(RTCSessionDescription *)sessionDesc Handler:(nonnull void (^)(RTCSessionDescription * _Nullable, RTCCameraVideoCapturer * _Nullable, NSError * _Nonnull))handler{
     self.isOffer = isOffer;
     RTCConfiguration *config = [[RTCConfiguration alloc]init];
-    RTCIceServer *iceserver = [[RTCIceServer alloc]initWithURLStrings:@[@"turn:www.lymggylove.top:3478"] username:@"lym" credential:@"123456"];
+    RTCIceServer *iceserver = [[RTCIceServer alloc]initWithURLStrings:@[@"turn:39.97.110.12:3478"] username:@"lym" credential:@"123456"];
     config.iceServers = @[iceserver];
 //    config.bundlePolicy = RTCBundlePolicyMaxBundle;
     //    config.rtcpMuxPolicy = RTCRtcpMuxPolicyRequire;
