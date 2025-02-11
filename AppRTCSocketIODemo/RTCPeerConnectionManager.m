@@ -35,7 +35,7 @@ static NSString * const kARDScreenVideoTrackId = @"ARDAMSv1";
 static NSString * const kARDMediaStreamId = @"ARDAMS";
 
 
-@interface RTCPeerConnectionManager ()<RTCPeerConnectionDelegate,RTCAudioSessionDelegate,RTCDataChannelDelegate,RTCEAGLVideoViewDelegate>
+@interface RTCPeerConnectionManager ()<RTCPeerConnectionDelegate,RTCAudioSessionDelegate,RTCDataChannelDelegate,RTCVideoViewDelegate>
 // 是不是主叫
 @property(nonatomic, strong)RTCPeerConnection *peerconnetion;
 @property(nonatomic, strong)RTCPeerConnectionFactory *peerconnetionFact;
@@ -120,7 +120,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 //    config.continualGatheringPolicy = RTCContinualGatheringPolicyGatherContinually;
 //    config.disableIPV6 = NO;
     //  这个参数不是必须设置，官方的代码如果报错就请注释
-    config.logFilePath  = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0] mutableCopy] stringByAppendingString:@"/log/"];
+//    config.logFilePath  = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0] mutableCopy] stringByAppendingString:@"/log/"];
     RTCMediaConstraints *constraints =  [self _defaultPeerConnectionConstraints];
     if (!self.peerconnetionFact) {
         return;
@@ -302,7 +302,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 //    }else{
 //
 //    }
-    RTCMediaConstraints* constraints = [[RTCMediaConstraints alloc]initWithMandatoryConstraints:mandatoryConstraints optionalConstraints:optionesConstraints];
+    RTCMediaConstraints* constraints = [[RTCMediaConstraints alloc]initWithMandatoryConstraints:nil optionalConstraints:optionesConstraints];
     return constraints;
 }
 -(void)audioSessionConfig{
