@@ -76,7 +76,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         RTCInitFieldTrialDictionary(fieldTrials);
         RTCDefaultVideoDecoderFactory *decodeFact = [[RTCDefaultVideoDecoderFactory alloc]init];
         RTCDefaultVideoEncoderFactory *encodeFact = [[RTCDefaultVideoEncoderFactory alloc]init];
-        encodeFact.preferredCodec = [[RTCVideoCodecInfo alloc]initWithName:kRTCVideoCodecVp8Name];
+        encodeFact.preferredCodec = [[RTCVideoCodecInfo alloc]initWithName:kRTCVideoCodecH265Name];
         _peerconnetionFact = [[RTCPeerConnectionFactory alloc]initWithEncoderFactory:encodeFact decoderFactory:decodeFact];
         _statsBuilder = [[RTCStatsBuilder alloc]init];
     }
@@ -272,6 +272,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         
     }
     if (_remoteVideoTrack) {
+        [_remoteVideoTrack removeRenderer:_remoteVideoView];
         [_remoteVideoTrack addRenderer:_remoteVideoView];
     }
     // 如果缓存有变化的大小就更新下

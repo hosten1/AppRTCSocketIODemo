@@ -94,5 +94,10 @@
 #import <WebRTC/RTCLDAudioCaptureSimulator.h>
 #import <WebRTC/RTCLDWavReader.h>
 #import <WebRTC/RTCLDWavFileWriteHelpers.h>
+#import <WebRTC/RTCH265ProfileLevelId.h>
+#import <WebRTC/RTCVideoDecoderFactoryH265.h>
+#import <WebRTC/RTCVideoDecoderH265.h>
+#import <WebRTC/RTCVideoEncoderFactoryH265.h>
+#import <WebRTC/RTCVideoEncoderH265.h>
 #import <WebRTC/RTCCallbackLogger.h>
 #import <WebRTC/RTCFileLogger.h>

@@ -11,6 +11,7 @@
 		1B0549E028348C7E00F31CCC /* RTCLYMTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549DF28348C7E00F31CCC /* RTCLYMTimer.m */; };
 		1B0549E528348DE300F31CCC /* RTCStatsBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549E128348DE300F31CCC /* RTCStatsBuilder.m */; };
 		1B0549E628348DE300F31CCC /* RTCBitrateTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549E228348DE300F31CCC /* RTCBitrateTracker.m */; };
+		1B245E4E2E41A4240077C543 /* LYMVideoCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B245E4D2E41A4240077C543 /* LYMVideoCallViewController.m */; };
 		1B364DAE282A034600CCC820 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DAD282A034600CCC820 /* AppDelegate.m */; };
 		1B364DB1282A034600CCC820 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DB0282A034600CCC820 /* SceneDelegate.m */; };
 		1B364DB4282A034600CCC820 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B364DB3282A034600CCC820 /* ViewController.m */; };
@@ -62,6 +63,8 @@
 		1B0549E228348DE300F31CCC /* RTCBitrateTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCBitrateTracker.m; sourceTree = "<group>"; };
 		1B0549E328348DE300F31CCC /* RTCBitrateTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCBitrateTracker.h; sourceTree = "<group>"; };
 		1B0549E428348DE300F31CCC /* RTCStatsBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCStatsBuilder.h; sourceTree = "<group>"; };
+		1B245E4C2E41A4240077C543 /* LYMVideoCallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LYMVideoCallViewController.h; sourceTree = "<group>"; };
+		1B245E4D2E41A4240077C543 /* LYMVideoCallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LYMVideoCallViewController.m; sourceTree = "<group>"; };
 		1B364DA9282A034600CCC820 /* AppRTCSocketIODemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppRTCSocketIODemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B364DAC282A034600CCC820 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1B364DAD282A034600CCC820 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 				1B364DB0282A034600CCC820 /* SceneDelegate.m */,
 				1B364DB2282A034600CCC820 /* ViewController.h */,
 				1B364DB3282A034600CCC820 /* ViewController.m */,
+				1B245E4C2E41A4240077C543 /* LYMVideoCallViewController.h */,
+				1B245E4D2E41A4240077C543 /* LYMVideoCallViewController.m */,
 				1B364DB5282A034600CCC820 /* Main.storyboard */,
 				1B364DB8282A034800CCC820 /* Assets.xcassets */,
 				1B364DBA282A034800CCC820 /* LaunchScreen.storyboard */,
@@ -288,6 +293,7 @@
 				1BEFA6E728308C3300595AD8 /* FBYLineGraphContentView.m in Sources */,
 				1B364DBF282A034800CCC820 /* main.m in Sources */,
 				1B364DCC282A042F00CCC820 /* LYMSocketManager.m in Sources */,
+				1B245E4E2E41A4240077C543 /* LYMVideoCallViewController.m in Sources */,
 				1BEFA6E628308C3300595AD8 /* FBYLineGraphBaseView.m in Sources */,
 				1B8978AD282B64C700B2EB5E /* RTCPeerConnectionManager.m in Sources */,
 				1BEFA6E428308C3300595AD8 /* FBYLineGraphView.m in Sources */,
