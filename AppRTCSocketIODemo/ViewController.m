@@ -13,7 +13,7 @@
 #import "FBYLineGraphView.h"
 
 
-#define KRTCSIGNALSERVER  @"39.97.110.12:443"
+#define KRTCSIGNALSERVER  @"8.137.17.218:443"
 //打
 @interface ViewController ()<RTCPeerConnectionManagerDelegate>
 

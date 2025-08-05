@@ -14,12 +14,12 @@
 typedef NS_ENUM(NSInteger, RTCManagerIceConnectionState) {
     RTCManagerIceConnectionStateNew,
     RTCManagerIceConnectionStateChecking,
-  RTCManagerIceConnectionStateConnected,
-  RTCManagerIceConnectionStateCompleted,
-  RTCManagerIceConnectionStateFailed,
-  RTCManagerIceConnectionStateDisconnected,
-  RTCManagerIceConnectionStateClosed,
-  RTCManagerIceConnectionStateCount,
+    RTCManagerIceConnectionStateConnected,
+    RTCManagerIceConnectionStateCompleted,
+    RTCManagerIceConnectionStateFailed,
+    RTCManagerIceConnectionStateDisconnected,
+    RTCManagerIceConnectionStateClosed,
+    RTCManagerIceConnectionStateCount,
 };
 typedef NS_ENUM(NSInteger,RTCAudioSessionDeviceType) {
     RTCAudioSessionDeviceTypeEarphone      = 1,//听筒
@@ -49,14 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  视频本地渲染窗口
-
+ 
  @param localeView 窗口
  */
 - (void)addLocalView:(UIView *_Nonnull)localeView;
 
 /**
  远端视频渲染窗口
-
+ 
  @param remoteView 视频渲染窗口
  @param userId  扩展参数
  */
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  数据通道发送消息功能
-
+ 
  @param msg 消息文本
  @return 是否发送成功
  */

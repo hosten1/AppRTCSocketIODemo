@@ -110,7 +110,7 @@ API_AVAILABLE(ios(10))
 #pragma mark - Private
 
 - (AVCaptureDevice *)findDeviceForPosition:(AVCaptureDevicePosition)position {
-    NSArray<AVCaptureDevice *> *captureDevices = [RTCCameraVideoCapturer captureDevices];
+    NSArray<AVCaptureDevice *> *captureDevices = [RTCCameraVideoCapturer captureDevicesWithPosition:position];
     for (AVCaptureDevice *device in captureDevices) {
         if (device.position == position) {
             return device;

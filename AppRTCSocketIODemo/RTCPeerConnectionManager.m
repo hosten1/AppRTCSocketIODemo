@@ -110,17 +110,17 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 - (void)startRTCWithIsOffer:(BOOL)isOffer offerSdp:(RTCSessionDescription *)sessionDesc Handler:(nonnull void (^)(RTCSessionDescription * _Nullable, RTCCameraVideoCapturer * _Nullable, NSError * _Nonnull))handler{
     self.isOffer = isOffer;
     RTCConfiguration *config = [[RTCConfiguration alloc]init];
-    RTCIceServer *iceserver = [[RTCIceServer alloc]initWithURLStrings:@[@"turn:39.97.110.12:3478"] username:@"lym" credential:@"123456"];
+    RTCIceServer *iceserver = [[RTCIceServer alloc]initWithURLStrings:@[@"turn:8.137.17.218:3478"] username:@"lym" credential:@"lym123456"];
     config.iceServers = @[iceserver];
-//    config.bundlePolicy = RTCBundlePolicyMaxBundle;
+    //    config.bundlePolicy = RTCBundlePolicyMaxBundle;
     //    config.rtcpMuxPolicy = RTCRtcpMuxPolicyRequire;
-//    config.iceTransportPolicy = RTCIceTransportPolicyAll;
-//    config.sdpSemantics = RTCSdpSemanticsPlanB;
-//    config.tcpCandidatePolicy = RTCTcpCandidatePolicyDisabled;
-//    config.continualGatheringPolicy = RTCContinualGatheringPolicyGatherContinually;
-//    config.disableIPV6 = NO;
+    //    config.iceTransportPolicy = RTCIceTransportPolicyAll;
+    //    config.sdpSemantics = RTCSdpSemanticsPlanB;
+    //    config.tcpCandidatePolicy = RTCTcpCandidatePolicyDisabled;
+    //    config.continualGatheringPolicy = RTCContinualGatheringPolicyGatherContinually;
+    //    config.disableIPV6 = NO;
     //  这个参数不是必须设置，官方的代码如果报错就请注释
-//    config.logFilePath  = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0] mutableCopy] stringByAppendingString:@"/log/"];
+    //    config.logFilePath  = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0] mutableCopy] stringByAppendingString:@"/log/"];
     RTCMediaConstraints *constraints =  [self _defaultPeerConnectionConstraints];
     if (!self.peerconnetionFact) {
         return;
@@ -136,12 +136,12 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         NSAssert(_sendDC, @"RTCDatachannal is null");
         _sendDC.delegate = self;
     }
-   
+    
     self.localVideoTrack = [self videoTrack];
     // WebRTC中封装的摄像头采集
     RTCCameraVideoCapturer *cameraCapture = [[RTCCameraVideoCapturer alloc]initWithDelegate:_localVideoTrack.source];
     self.cameraCapture = cameraCapture;
-
+    
     [self.peerconnetion addTrack:_localVideoTrack streamIds:@[kARDMediaStreamId]];
     _localVideoTrack.isEnabled = true;
     self.localAudioTrack = [self audioTrack];
@@ -165,7 +165,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
                         if (weakSelf.localeVideoView) {
                             dispatch_main_async_safe(^{
                                 weakSelf.localeVideoView.captureSession = weakSelf.cameraCapture.captureSession;
-
+                                
                             });
                         }
                     }
@@ -179,7 +179,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         }];
         
     }else{
-       
+        
         WEAKSELF
         [self.peerconnetion setRemoteDescription:sessionDesc completionHandler:^(NSError * _Nullable error) {
             if (!error) {
@@ -201,7 +201,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
                                 if (weakSelf.localeVideoView) {
                                     dispatch_main_async_safe(^{
                                         weakSelf.localeVideoView.captureSession = weakSelf.cameraCapture.captureSession;
-
+                                        
                                     });
                                 }
                             }
@@ -219,7 +219,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
             }
         }];
     }
-   
+    
     
 }
 -(void)setRemoteSDPWithSDP:(NSString *)sdp{
@@ -243,12 +243,12 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         //然后添加到peer里
         [self.peerconnetion addIceCandidate:candidate];
     } else {
-//        添加到缓存里
+        //        添加到缓存里
         [self.cacheCandidateMsg addObject:candidate];
     }
 }
 - (void)addLocalView:(UIView *)localeView{
-
+    
     if (!_localeVideoView) {
         self.localeVideoView = [[RTCCameraPreviewView alloc]init];
         _localeVideoView.backgroundColor = [UIColor blackColor];
@@ -261,7 +261,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     if (_cameraCapture) {
         _localeVideoView.captureSession = _cameraCapture.captureSession;
     }
-
+    
 }
 -(void)addRemoteView:(UIView *)remoteView userID:(NSString *)userId{
     if (!_remoteVideoView) {
@@ -278,7 +278,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     if (_remoteVideoSize.width > 0) {
         [self updateVideoViewFrameWithchangeVideoView:_remoteVideoView changeToSize:_remoteVideoSize];
     }
-
+    
 }
 - (void)_addcandidateFUN {
     for (RTCIceCandidate *candidate in [NSArray arrayWithArray:_cacheCandidateMsg]) {
@@ -295,13 +295,13 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     
     [mandatoryConstraints setObject:kRTCMediaConstraintsValueTrue forKey:kRTCMediaConstraintsOfferToReceiveAudio];
     [mandatoryConstraints setObject:kRTCMediaConstraintsValueTrue forKey:kRTCMediaConstraintsOfferToReceiveVideo];
-
+    
     NSMutableDictionary *optionesConstraints = [NSMutableDictionary dictionary];
-//    if (_isRestartConnection) {
-//        [optionesConstraints setObject:kRTCMediaConstraintsValueTrue forKey:kRTCMediaConstraintsIceRestart];
-//    }else{
-//
-//    }
+    //    if (_isRestartConnection) {
+    //        [optionesConstraints setObject:kRTCMediaConstraintsValueTrue forKey:kRTCMediaConstraintsIceRestart];
+    //    }else{
+    //
+    //    }
     RTCMediaConstraints* constraints = [[RTCMediaConstraints alloc]initWithMandatoryConstraints:nil optionalConstraints:optionesConstraints];
     return constraints;
 }
@@ -350,10 +350,10 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 }
 -(NSString *)switchAudioDeviceWithDeviceType:(RTCAudioSessionDeviceType)deviceType{
     NSMutableString *str = [NSMutableString string];
-//    if (deviceType == RTCAudioSessionDeviceTypeHeadsetMic ) {//耳机/蓝牙不处理切换事件
-//
-//        return @"耳机不处理切换事件";
-//    }
+    //    if (deviceType == RTCAudioSessionDeviceTypeHeadsetMic ) {//耳机/蓝牙不处理切换事件
+    //
+    //        return @"耳机不处理切换事件";
+    //    }
     switch (deviceType) {
         case RTCAudioSessionDeviceTypeEarphone:{
             [self switchEarphone:YES];
@@ -379,7 +379,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 - (BOOL)switchSpeaker:(BOOL)onOrOff
 {
     [_audioSession lockForConfiguration];
-
+    
     NSError* audioError = nil;
     BOOL changeResult = NO;
     if (onOrOff == YES)
@@ -396,7 +396,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         
     }
     [_audioSession unlockForConfiguration];
-
+    
     return changeResult;
 }
 
@@ -521,11 +521,11 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         [self.sendDC close];
         self.sendDC = nil;
     }
-   
+    
     self.isOffer = YES;
     [self.cacheCandidateMsg removeAllObjects];
     self.isSetRemote = NO;
-   
+    
     [self unConfigureAudioSession];
     
     
@@ -568,28 +568,28 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 }
 
 - (void)peerConnection:(nonnull RTCPeerConnection *)peerConnection didAddStream:(nonnull RTCMediaStream *)stream {
-        [RTCDispatcher dispatchAsyncOnType:RTCDispatcherTypeMain block:^{
-            if (stream.videoTracks > 0) {
-                RTCVideoTrack *track = stream.videoTracks[0];
-                self.remoteVideoTrack = track;
-                if (self.remoteVideoView) {
-                    [track addRenderer:self.remoteVideoView];
-                }
-    
+    [RTCDispatcher dispatchAsyncOnType:RTCDispatcherTypeMain block:^{
+        if (stream.videoTracks > 0) {
+            RTCVideoTrack *track = stream.videoTracks[0];
+            self.remoteVideoTrack = track;
+            if (self.remoteVideoView) {
+                [track addRenderer:self.remoteVideoView];
             }
-        }];
-//    NSArray<RTCRtpReceiver*> *receivers =  self.peerconnetion.receivers;
-//    RTCMediaStreamTrack *track;
-//    for (RTCRtpReceiver *rtpRtcRec in receivers) {
-//        if ([rtpRtcRec.track.kind isEqualToString:@"video"]) {
-//            track = rtpRtcRec.track;
-//            break;
-//        }
-//        //                    rtpRtcRec.track.isEnabled = YES;
-//    }
-//    [RTCDispatcher dispatchAsyncOnType:RTCDispatcherTypeMain block:^{
-//        [(RTCVideoTrack*)track addRenderer:self.remoteVideoView];
-//    }];
+            
+        }
+    }];
+    //    NSArray<RTCRtpReceiver*> *receivers =  self.peerconnetion.receivers;
+    //    RTCMediaStreamTrack *track;
+    //    for (RTCRtpReceiver *rtpRtcRec in receivers) {
+    //        if ([rtpRtcRec.track.kind isEqualToString:@"video"]) {
+    //            track = rtpRtcRec.track;
+    //            break;
+    //        }
+    //        //                    rtpRtcRec.track.isEnabled = YES;
+    //    }
+    //    [RTCDispatcher dispatchAsyncOnType:RTCDispatcherTypeMain block:^{
+    //        [(RTCVideoTrack*)track addRenderer:self.remoteVideoView];
+    //    }];
 }
 
 
@@ -720,8 +720,8 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
             }else{
             }
         }
-
-      
+        
+        
     }else{
         if (videoViewSize.width > videoViewSize.height) {
             width = remoteViewBounds.size.width;

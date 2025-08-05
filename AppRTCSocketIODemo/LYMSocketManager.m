@@ -27,7 +27,7 @@
 
 -(void)connectionSocketWithServerUrl:(NSString*)serverUrl isHttps:(BOOL)isHttps params:(NSDictionary*)connect
 {
-
+    
     // 这个消息 是在http的消息体力包含
     NSDictionary *connectParams = @{@"version_name":@"3.2.1",
                                     @"version_code":@"43234",
@@ -47,20 +47,20 @@
         
     }];
     self.socket = [[RTCVPSocketIOClient alloc] init:[NSURL URLWithString:serverUrl]
-                                    withConfig:@{@"log": @NO,
-                                                 @"reconnects":@YES,
-                                                 @"reconnectAttempts":@(20),
-                                                 @"forcePolling": @YES,
-                                                 @"secure": @(isHttps),
-                                                 @"forceNew":@YES,
-                                                 @"forceWebsockets":@(YES),
-                                                 @"selfSigned":@(isHttps),
-                                                 @"reconnectWait":@3,
-                                                 @"nsp":@"/",
-                                                 @"connectParams":connectParams,
-                                                 @"logger":logger
-                                    }];
-   WEAKSELF
+                                         withConfig:@{@"log": @NO,
+                                                      @"reconnects":@YES,
+                                                      @"reconnectAttempts":@(20),
+                                                      @"forcePolling": @YES,
+                                                      @"secure": @(isHttps),
+                                                      @"forceNew":@YES,
+                                                      @"forceWebsockets":@(YES),
+                                                      @"selfSigned":@(isHttps),
+                                                      @"reconnectWait":@3,
+                                                      @"nsp":@"/",
+                                                      @"connectParams":connectParams,
+                                                      @"logger":logger
+                                                    }];
+    WEAKSELF
     [_socket on:kSocketEventConnect callback:^(NSArray *array, RTCVPSocketAckEmitter *emitter) {
         STRONGSELF
         [strongSelf _parseMsgWithData:@"connect" daraArr:array resp:nil];
@@ -91,8 +91,8 @@
     }];
     
     [_socket connectWithTimeoutAfter:10 withHandler:^{
-//        STRONGSELF
-       
+        //        STRONGSELF
+        
         NSLog(@"=======>连接超时了");
     }];
     
@@ -104,11 +104,11 @@
     if (array.count == 1) {
         _notifyInfo(emit,nil,nil,array[0],nil);
     }else if (array.count == 2) {
-       _notifyInfo(emit,nil,array[0],array[1],nil);
+        _notifyInfo(emit,nil,array[0],array[1],nil);
     }else if (array.count == 3) {
-       _notifyInfo(emit,array[0],array[1],array[2],nil);
+        _notifyInfo(emit,array[0],array[1],array[2],nil);
     }else{
-       _notifyInfo(emit,nil,nil,array[0],nil);
+        _notifyInfo(emit,nil,nil,array[0],nil);
     }
 }
 - (void)listenWithCB:(notifyInfoCB)notifyInfo{
@@ -117,13 +117,13 @@
     }
 }
 - (void)joinwihtRoomId:(NSString*)roomId name:(NSString*)name{
-//    [self sendMessage:nil withMethod:@"join"];
-//    [_socket emit:@"join" items:@[roomId]];
+    //    [self sendMessage:nil withMethod:@"join"];
+    //    [_socket emit:@"join" items:@[roomId]];
     RTCVPSocketOnAckCallback *callback = [_socket emitWithAck:@"join" items:@[roomId]];
     [callback timingOutAfter:10 callback:^(NSArray *array) {
         NSLog(@">>>>>>>>>ack msg:%@",array);
     }];
-
+    
 }
 -(void)sendMessageWithInfo:(NSString *)info message:(NSDictionary *)message withMethod:(NSString *)method{
     WEAKSELF
@@ -135,7 +135,7 @@
             }
             NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:message];
             if (info) {
-                 
+                
                 data[@"roomId"] = info;
             }
             RTCVPSocketOnAckCallback *callback = [blockSelf.socket emitWithAck:method items:@[data]];
@@ -147,7 +147,7 @@
 }
 - (void)sendMessage:(NSDictionary*)message withMethod:(NSString*)method{
     
-  
+    
     
 }
 -(void)close{
