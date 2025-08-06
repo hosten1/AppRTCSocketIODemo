@@ -21,6 +21,7 @@
 #define LIGHT_TEXT_COLOR [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0]
 #define SUCCESS_COLOR [UIColor colorWithRed:52.0/255.0 green:199.0/255.0 blue:89.0/255.0 alpha:1.0]
 #define ERROR_COLOR [UIColor colorWithRed:255.0/255.0 green:59.0/255.0 blue:48.0/255.0 alpha:1.0]
+#define INFO_BG_COLOR [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] // 半透明黑色背景
 
 
 @interface LYMVideoCallViewController ()<RTCPeerConnectionManagerDelegate>
@@ -42,6 +43,8 @@
 @property (nonatomic, strong) UIButton *switchAudioDeviceBtn;
 @property (nonatomic, strong) FBYLineGraphView *rttLineGraphView;
 @property (nonatomic, strong) FBYLineGraphView *packLostLineGraphView;
+// 新增：编解码信息标签
+@property (nonatomic, strong) UILabel *codecInfoLabel;
 
 @property (nonatomic, assign) BOOL isOffer;
 @property (nonatomic, strong) RTCLYMTimer *timer;
@@ -115,6 +118,17 @@
     self.switchAudioDeviceBtn = [self createIconButtonWithSystemName:@"speaker.wave.3"];
     [self.switchAudioDeviceBtn addTarget:self action:@selector(switchDevice:) forControlEvents:UIControlEventTouchUpInside];
     
+    // 新增：编解码信息标签
+    self.codecInfoLabel = [[UILabel alloc] init];
+    self.codecInfoLabel.text = @"编解码: -";
+    self.codecInfoLabel.textColor = [UIColor whiteColor];
+    self.codecInfoLabel.backgroundColor = INFO_BG_COLOR;
+    self.codecInfoLabel.font = [UIFont systemFontOfSize:12];
+    self.codecInfoLabel.textAlignment = NSTextAlignmentCenter;
+    self.codecInfoLabel.layer.cornerRadius = 4;
+    self.codecInfoLabel.layer.masksToBounds = YES;
+    self.codecInfoLabel.hidden = YES;
+    
     // 添加到容器
     NSArray *views = @[
         self.statusLabel,
@@ -125,7 +139,8 @@
         self.startBtn,
         self.switchCameraBtn,
         self.mutedBtn,
-        self.switchAudioDeviceBtn
+        self.switchAudioDeviceBtn,
+        self.codecInfoLabel  // 添加编解码标签
     ];
     
     for (UIView *view in views) {
@@ -150,7 +165,8 @@
         @"start": self.startBtn,
         @"camera": self.switchCameraBtn,
         @"mute": self.mutedBtn,
-        @"audio": self.switchAudioDeviceBtn
+        @"audio": self.switchAudioDeviceBtn,
+        @"codec": self.codecInfoLabel  // 添加编解码标签
     };
     
     // 垂直间距
@@ -168,6 +184,12 @@
         [self.remoteVideoView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:padding],
         [self.remoteVideoView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-padding],
         [self.remoteVideoView.heightAnchor constraintEqualToAnchor:self.remoteVideoView.widthAnchor multiplier:0.75],
+        
+        // 新增：编解码信息标签（放在远程视频上方）
+        [self.codecInfoLabel.bottomAnchor constraintEqualToAnchor:self.remoteVideoView.topAnchor constant:-padding/2],
+        [self.codecInfoLabel.centerXAnchor constraintEqualToAnchor:self.remoteVideoView.centerXAnchor],
+        [self.codecInfoLabel.widthAnchor constraintEqualToConstant:200],
+        [self.codecInfoLabel.heightAnchor constraintEqualToConstant:24],
         
         // 本地视频 (右上角悬浮)
         [self.localeVideoView.topAnchor constraintEqualToAnchor:self.remoteVideoView.topAnchor constant:padding],
@@ -327,7 +349,6 @@
 }
 
 - (IBAction)mutedBtn:(UIButton *)sender {
-    [self showStates];
     sender.selected = !sender.selected;
 //    [self.peerManager setAudioEnabled:!sender.selected];
 }
@@ -523,6 +544,7 @@
                 self.switchCameraBtn.enabled = YES;
                 self.mutedBtn.enabled = YES;
                 self.switchAudioDeviceBtn.enabled = YES;
+                [self  showStates];
             });
             break;
         }
@@ -575,12 +597,66 @@
             [self.peerManager getStatesWithCallBack:^(NSDictionary<NSString *,id> * _Nonnull dataCb) {
                 STRONGSELF
                 [strongSelf _statsStringWithDic:dataCb withSessionid:strongSelf.roomId];
+                
+                // 新增：更新编解码信息
+                [strongSelf updateCodecInfoWithStats:dataCb];
             }];
         } startInterval:1 interbal:1 repeat:YES async:YES];
     }
     
     
 }
+
+// 新增：更新编解码信息显示
+// 更新编解码信息显示
+- (void)updateCodecInfoWithStats:(NSDictionary<NSString *,id> *)stats {
+    // 视频编解码器 - 优先使用发送端信息
+    NSString *videoCodec = @"-";
+    if (stats[@"videoSendCodec"]) {
+        videoCodec = stats[@"videoSendCodec"];
+    } else if (stats[@"videoRecvCodec"]) {
+        videoCodec = stats[@"videoRecvCodec"];
+    }
+    
+    // 音频编解码器 - 根据实际使用情况判断
+    NSString *audioCodec = @"-";
+    if (stats[@"audioSendBitrate"] && ![stats[@"audioSendBitrate"] isEqualToString:@"0bps"]) {
+        audioCodec = @"opus"; // 发送端有音频数据，默认为opus
+    } else if (stats[@"audioRecvBitrate"] && ![stats[@"audioRecvBitrate"] isEqualToString:@"0bps"]) {
+        audioCodec = @"opus"; // 接收端有音频数据，默认为opus
+    }
+    
+    // 分辨率信息
+    NSString *resolution = @"-";
+    if (stats[@"videoSendWidth"] && stats[@"videoSendHeight"]) {
+        int width = [stats[@"videoSendWidth"] intValue];
+        int height = [stats[@"videoSendHeight"] intValue];
+        if (width > 0 && height > 0) {
+            resolution = [NSString stringWithFormat:@"%dx%d", width, height];
+        }
+    } else if (stats[@"videoRecvWidth"] && stats[@"videoRecvHeight"]) {
+        int width = [stats[@"videoRecvWidth"] intValue];
+        int height = [stats[@"videoRecvHeight"] intValue];
+        if (width > 0 && height > 0) {
+            resolution = [NSString stringWithFormat:@"%dx%d", width, height];
+        }
+    }
+    
+    // 创建显示字符串
+    NSString *codecInfo = [NSString stringWithFormat:@"视频: %@ %@ | 音频: %@",
+                           videoCodec, resolution, audioCodec];
+    
+    // 更新UI
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.codecInfoLabel.text = codecInfo;
+        self.codecInfoLabel.hidden = NO;
+        
+        // 根据编解码器调整标签宽度
+        CGFloat requiredWidth = [codecInfo sizeWithAttributes:@{NSFontAttributeName: self.codecInfoLabel.font}].width + 20;
+        [self.codecInfoLabel.widthAnchor constraintEqualToConstant:MAX(200, requiredWidth)].active = YES;
+    });
+}
+
 
 - (void)peerConnectionManager:(nonnull RTCPeerConnectionManager *)client didGenerateIceCandidate:(nonnull NSString *)candidateStr sdpMLineIndex:(int)sdpMLineIndex sdpMid:(nonnull NSString *)sdpMid {
     NSDictionary *msg = @{
