@@ -269,6 +269,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
         _remoteVideoView.backgroundColor = [UIColor blackColor];
         _remoteVideoView.frame = CGRectMake(0,0, remoteView.bounds.size.width, remoteView.bounds.size.height);
         [remoteView insertSubview:_remoteVideoView atIndex:0];
+        _remoteVideoView.delegate = self;
         
     }
     if (_remoteVideoTrack) {
