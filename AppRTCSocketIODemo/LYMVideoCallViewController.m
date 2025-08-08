@@ -439,6 +439,7 @@
                 NSDictionary *recvSdp = data[@"sdp"];
                 RTCSessionDescription *offerDesc = [[RTCSessionDescription alloc]initWithType:RTCSdpTypeOffer sdp:recvSdp[@"sdp"]];
                 [self _startRTCWithOfferSdp:offerDesc];
+
             }
                 break;
             case 1: {// answer
@@ -487,6 +488,7 @@
     });
     self.startBtn.enabled = NO;
     self.mutedBtn.enabled = NO;
+    [self.navigationController popViewControllerAnimated:YES];
 //    self.switchCamera.enabled = NO;
 //    self.switchAudioDevice.enabled = NO;
 }
@@ -517,6 +519,8 @@
                 
             }];
         }
+        [strongSelf.peerManager addLocalView:strongSelf.localeVideoView];
+
         
         
     }];
@@ -591,7 +595,6 @@
         }
         case RTCManagerIceConnectionStateConnected: {
             dispatch_main_async_safe(^{
-                [self.peerManager addLocalView:self.localeVideoView];
                 [self.peerManager addRemoteView:self.remoteVideoView userID:self.userId];
                 self.switchCameraBtn.enabled = YES;
                 self.mutedBtn.enabled = YES;

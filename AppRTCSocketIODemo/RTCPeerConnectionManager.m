@@ -59,6 +59,7 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
 
 @property(nonatomic, assign) CGSize remoteVideoSize;
 @property(nonatomic, strong) RTCStatsBuilder *statsBuilder;
+
 @end
 
 @implementation RTCPeerConnectionManager
@@ -141,6 +142,10 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     // WebRTC中封装的摄像头采集
     RTCCameraVideoCapturer *cameraCapture = [[RTCCameraVideoCapturer alloc]initWithDelegate:_localVideoTrack.source];
     self.cameraCapture = cameraCapture;
+    if (_localeVideoView) {
+        _localeVideoView.captureSession = _cameraCapture.captureSession;
+
+    }
     
     [self.peerconnetion addTrack:_localVideoTrack streamIds:@[kARDMediaStreamId]];
     _localVideoTrack.isEnabled = true;
@@ -248,19 +253,21 @@ static NSString * const kARDMediaStreamId = @"ARDAMS";
     }
 }
 - (void)addLocalView:(UIView *)localeView{
-    
-    if (!_localeVideoView) {
-        self.localeVideoView = [[RTCCameraPreviewView alloc]init];
-        _localeVideoView.backgroundColor = [UIColor blackColor];
-        _localeVideoView.frame = CGRectMake(0, 0, localeView.bounds.size.width,localeView.bounds.size.height);
-        _localeVideoView.hidden = NO;
-        [localeView insertSubview:_localeVideoView atIndex:0];
-        
-    }
-    // 如果已经有catpure了 就添加显示
-    if (_cameraCapture) {
-        _localeVideoView.captureSession = _cameraCapture.captureSession;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.localeVideoView) {
+            self.localeVideoView = [[RTCCameraPreviewView alloc]init];
+            self.localeVideoView.backgroundColor = [UIColor blackColor];
+            self.localeVideoView.frame = CGRectMake(0, 0, localeView.bounds.size.width,localeView.bounds.size.height);
+            self.localeVideoView.hidden = NO;
+            [localeView insertSubview:self.localeVideoView atIndex:0];
+            
+        }
+        // 如果已经有catpure了 就添加显示
+        if (self.cameraCapture) {
+            self.localeVideoView.captureSession = self.cameraCapture.captureSession;
+        }
+    });
+   
     
 }
 -(void)addRemoteView:(UIView *)remoteView userID:(NSString *)userId{
