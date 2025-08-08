@@ -36,7 +36,7 @@ typedef void(^notifyInfoCB)(NSString* __nonnull emit,NSString* __nullable data1,
 @interface LYMSocketManager : NSObject
 
 - (void)connectionSocketWithServerUrl:(NSString* __nonnull)serverUrl isHttps:(BOOL)isHttps params: (NSDictionary* __nullable)connectParams;
-- (void)joinwihtRoomId:(NSString* __nonnull)roomId name:(NSString* __nullable)name;
+- (void)joinwihtRoomId:(NSString* __nonnull)roomId ownerId:(NSString* __nonnull)ownerId name:(NSString* __nullable)name callback:(void(^)(NSDictionary *data))cb;
 - (void)sendMessage:(NSDictionary* __nonnull)message withMethod:(NSString* __nonnull)method;
 - (void)sendMessageWithInfo:(NSString*)info message:(NSDictionary*)message withMethod:(NSString*)method;
 

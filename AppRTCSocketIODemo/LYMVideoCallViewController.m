@@ -48,6 +48,8 @@
 
 @property (nonatomic, assign) BOOL isOffer;
 @property (nonatomic, strong) RTCLYMTimer *timer;
+
+@property(nonatomic, copy) NSString *targetId;
 @end
 
 
@@ -58,6 +60,9 @@
     
     [self setupUI];
     [self initializeComponents];
+    if (_userName == nil) {
+        _userName = @"nihao";
+    }
 }
 
 - (void)setupUI {
@@ -322,14 +327,19 @@
 
 - (void)startRTCConnectoin:(UIButton *)sender {
     if (sender.selected) {
-        [self.socketManager sendMessageWithInfo:self.roomId message:@{} withMethod:@"leave"];
+        [self.socketManager sendMessageWithInfo:self.roomId message:@{
+            @"roomId":_roomId,
+            @"senderId":_userId
+        } withMethod:@"leave"];
         [self close];
         [sender setTitle:@"开始通话" forState:UIControlStateNormal];
         sender.selected = NO;
         [self updateConnectionStatus:@"通话已结束" color:ERROR_COLOR];
     } else {
-        self.roomId = @"123456";
-        [self.socketManager joinwihtRoomId:self.roomId name:@"44333"];
+//        self.roomId = @"123456";
+        [self.socketManager joinwihtRoomId:self.roomId ownerId:_userId name:_userName callback:^(NSDictionary * _Nonnull data) {
+            
+        } ];
         [sender setTitle:@"结束通话" forState:UIControlStateNormal];
         sender.selected = YES;
         [self updateConnectionStatus:@"正在建立连接..." color:SUCCESS_COLOR];
@@ -380,14 +390,45 @@
     }else if ([emit isEqualToString:@"joined"]){
         
     }else if ([emit isEqualToString:@"otherJoined"]){
+        NSLog(@"otherJoined: %@", data);
+        NSString *senderId = data[@"senderId"];
+        self.targetId = senderId;
         // 初始化为webrtc 相关 这里只要对方一加入就 启动webrtc
         self.isOffer = true;
         // 自定义的 摄像头管理类
         [self _startRTCWithOfferSdp:nil];
         
+//        // 检查是否已存在该用户的peer连接
+//        if (![strongSelf.peerManager hasConnectionForUser:senderId]) {
+//            // 添加远端视频视图
+//            [strongSelf addRemoteVideoForUser:senderId];
+//
+//            // 初始化Peer连接
+//            [strongSelf initPeerConnectionForUser:senderId isOffer:YES];
+//
+//            // 更新日志
+//            NSString *joinMsg = [NSString stringWithFormat:@"用户 %@ 加入了房间", senderId];
+//            [strongSelf appendLogMessage:joinMsg];
+//        } else {
+//            NSString *errorMsg = [NSString stringWithFormat:@"用户 %@ 的连接已存在", senderId];
+//            NSLog(@"%@", errorMsg);
+//            [strongSelf appendLogMessage:errorMsg];
+//        }
+        
     }else if ([emit isEqualToString:@"leaved"]){
         
+        NSLog(@"leaved: %@", data);
+        NSString *senderId = data[@"senderId"];
+        [self close];
+        // 更新日志
+        NSString *leaveMsg = [NSString stringWithFormat:@"用户 %@ 离开了房间", senderId];
+        
     }else if ([emit isEqualToString:@"message"]){
+        NSString *senderId = data[@"senderId"];
+//        if (id === selfid) {
+//                        console.error(`lym id errr selfid:${selfid} senderId:${senderId}`);
+//                        return;
+//        }
         int type = [data[@"type"] intValue];
         switch (type) {
             case 0: {// offer
@@ -455,7 +496,10 @@
                 sdpType =  @"answer";
                 msgType = @(1);
             }
-            NSDictionary *msg = @{ @"type":msgType,
+            NSDictionary *msg = @{@"targetId":self.targetId,
+                                  @"roomId":self.roomId,
+                                  @"senderId":self.userId,
+                                   @"type":msgType,
                                    @"sdp": @{@"type":sdpType,@"sdp":sessionDesc.sdp}};
             [strongSelf.socketManager sendMessageWithInfo:strongSelf.roomId message:msg withMethod:@"message"];
         }
@@ -540,7 +584,7 @@
         case RTCManagerIceConnectionStateConnected: {
             dispatch_main_async_safe(^{
                 [self.peerManager addLocalView:self.localeVideoView];
-                [self.peerManager addRemoteView:self.remoteVideoView userID:nil];
+                [self.peerManager addRemoteView:self.remoteVideoView userID:self.userId];
                 self.switchCameraBtn.enabled = YES;
                 self.mutedBtn.enabled = YES;
                 self.switchAudioDeviceBtn.enabled = YES;
@@ -661,6 +705,9 @@
 - (void)peerConnectionManager:(nonnull RTCPeerConnectionManager *)client didGenerateIceCandidate:(nonnull NSString *)candidateStr sdpMLineIndex:(int)sdpMLineIndex sdpMid:(nonnull NSString *)sdpMid {
     NSDictionary *msg = @{
         @"type": @(2),
+        @"targetId":_targetId,
+        @"roomId":_roomId,
+        @"senderId":_userId,
         @"candidate":@{
             @"candidate":candidateStr,
             @"sdpMid":sdpMid,

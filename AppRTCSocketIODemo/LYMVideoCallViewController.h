@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *port;
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *userId;
+@property (nonatomic, strong) NSString *userName;
 @end
 
 NS_ASSUME_NONNULL_END

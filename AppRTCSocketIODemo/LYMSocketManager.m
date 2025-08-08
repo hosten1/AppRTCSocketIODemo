@@ -116,12 +116,19 @@
         self.notifyInfo = notifyInfo;
     }
 }
-- (void)joinwihtRoomId:(NSString*)roomId name:(NSString*)name{
+- (void)joinwihtRoomId:(NSString *)roomId ownerId:(NSString *)ownerId name:(NSString *)name callback:(void (^)(NSDictionary * _Nonnull))cb{
     //    [self sendMessage:nil withMethod:@"join"];
     //    [_socket emit:@"join" items:@[roomId]];
-    RTCVPSocketOnAckCallback *callback = [_socket emitWithAck:@"join" items:@[roomId]];
+    NSDictionary *data = @{
+        @"roomId": roomId,
+        @"userId": ownerId
+    };
+    RTCVPSocketOnAckCallback *callback = [_socket emitWithAck:@"join" items:@[data]];
     [callback timingOutAfter:10 callback:^(NSArray *array) {
         NSLog(@">>>>>>>>>ack msg:%@",array);
+        if (cb) {
+            cb(array[0]);
+        }
     }];
     
 }
