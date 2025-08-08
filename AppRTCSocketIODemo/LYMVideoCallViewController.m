@@ -425,6 +425,9 @@
         
     }else if ([emit isEqualToString:@"message"]){
         NSString *senderId = data[@"senderId"];
+        if(!_targetId){
+            self.targetId = senderId;
+        }
 //        if (id === selfid) {
 //                        console.error(`lym id errr selfid:${selfid} senderId:${senderId}`);
 //                        return;
@@ -463,10 +466,15 @@
 - (void)close{
     //停止本地摄像头
     WEAKSELF
-    [_videoCapture stopCaptureWitCcompletionHandler:^{
-        STRONGSELF
-        strongSelf.videoCapture = nil;
-    }];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self.videoCapture stopCaptureWitCcompletionHandler:^{
+            STRONGSELF
+            strongSelf.videoCapture = nil;
+            //释放其他资源
+            [strongSelf.peerManager close];
+        }];
+    });
+
     self.localeVideoView.hidden = YES;
     self.remoteVideoView.hidden = YES;
     //释放其他资源

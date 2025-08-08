@@ -50,7 +50,9 @@
     self.roomIdField = [self createTextFieldWithPlaceholder:@"房间号"];
     self.userIdField = [self createTextFieldWithPlaceholder:@"用户ID"];
     self.roomIdField.text = @"123456";
-    self.userIdField.text = @"3333423";
+    // 生成一个 7 位的随机数字字符串
+    int randomNumber = arc4random_uniform(9000000) + 1000000;
+    self.userIdField.text = [NSString stringWithFormat:@"%d", randomNumber];
     UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [confirmButton setTitle:@"确认" forState:UIControlStateNormal];
     [confirmButton addTarget:self action:@selector(confirmTapped) forControlEvents:UIControlEventTouchUpInside];
